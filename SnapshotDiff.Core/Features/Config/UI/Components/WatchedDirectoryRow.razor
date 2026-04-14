@@ -1,0 +1,51 @@
+@using SnapshotDiff.Features.Config.Domain
+@using SnapshotDiff.Features.Config.UI
+@inject IStringLocalizer<SettingsResources> Loc
+
+<div class="watched-dir-row">
+    <div class="watched-dir-info">
+        <span class="watched-dir-icon">📁</span>
+        <div class="watched-dir-details">
+            @if (_editing)
+            {
+                <input class="dir-label-input" @bind="_editLabel" @bind:event="oninput"
+                       @onkeydown="OnLabelKeyDown" placeholder="@Loc["WatchedDir_Placeholder_Label"]" />
+            }
+            else
+            {
+                <span class="watched-dir-name" @ondblclick="StartEdit">@Directory.DisplayName</span>
+            }
+            <span class="watched-dir-path">@Directory.Path</span>
+            @if (Directory.LastScannedAt.HasValue)
+            {
+                <span class="watched-dir-scanned" style="color: var(--text-muted); font-size: 0.75rem;">
+                    @Loc["WatchedDir_LastScanned", Directory.LastScannedAt.Value.ToLocalTime().ToString("g")]
+                </span>
+            }
+        </div>
+    </div>
+
+    <div class="watched-dir-actions">
+        @if (_editing)
+        {
+            <AppButton Size="sm" Variant="primary" OnClick="ConfirmRename">@Loc["WatchedDir_Btn_Save"]</AppButton>
+            <AppButton Size="sm" Variant="ghost" OnClick="CancelEdit">@Loc["WatchedDir_Btn_Cancel"]</AppButton>
+        }
+        else
+        {
+            <AppButton Size="sm" Variant="ghost" OnClick="StartEdit" title="@Loc["WatchedDir_Tooltip_Rename"]">✏️</AppButton>
+            <AppButton Size="sm" Variant="danger" OnClick="() => _showConfirm = true"
+                       title="@Loc["WatchedDir_Btn_Remove"]">🗑️</AppButton>
+        }
+    </div>
+</div>
+
+<AppDialog IsOpen="_showConfirm"
+           IsOpenChanged="v => _showConfirm = v"
+           Title="@Loc["WatchedDir_Dialog_RemoveTitle"]"
+           ConfirmText="@Loc["WatchedDir_Btn_Remove"]"
+           ConfirmVariant="danger"
+           OnConfirm="ConfirmRemove">
+    <p>@Loc["WatchedDir_Confirm_Remove"]</p>
+    <p class="confirm-hint">@Loc["WatchedDir_Confirm_Hint"]</p>
+</AppDialog>

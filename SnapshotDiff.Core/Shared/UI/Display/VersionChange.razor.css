@@ -1,0 +1,29 @@
+.version-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.version-old {
+    color: #999999;
+}
+
+.version-arrow {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.version-new {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.version-single {
+    color: #cccccc;
+    font-size: 12px;
+}
+
+.version-none {
+    color: #666666;
+}

@@ -1,0 +1,6 @@
+@using Microsoft.AspNetCore.Components
+
+<button class="toggle-filter-button @ColorClass @(IsActive ? "active" : "")" 
+        @onclick="HandleClick">
+    @Label (@Count)
+</button>

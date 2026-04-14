@@ -1,0 +1,17 @@
+@namespace SnapshotDiff.Shared.UI.Components
+
+<span class="badge @VariantClass @Class">@ChildContent</span>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Variant { get; set; } = "neutral"; // added|modified|deleted|neutral
+    [Parameter] public string Class { get; set; } = "";
+
+    private string VariantClass => Variant switch
+    {
+        "added"    => "badge-added",
+        "modified" => "badge-modified",
+        "deleted"  => "badge-deleted",
+        _          => "badge-neutral"
+    };
+}

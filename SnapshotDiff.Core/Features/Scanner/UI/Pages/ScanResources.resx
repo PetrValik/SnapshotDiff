@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="PageTitle" xml:space="preserve"><value>Scan</value></data>
+  <data name="Scan" xml:space="preserve"><value>Scan</value></data>
+  <data name="Scanning" xml:space="preserve"><value>Scanning…</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="NoDirectories" xml:space="preserve"><value>No directories — add one with the + button</value></data>
+  <data name="EmptyState" xml:space="preserve"><value>Select a directory and click Scan to find files</value></data>
+  <data name="NoResults" xml:space="preserve"><value>No files match the current filters</value></data>
+  <data name="ClearFilters" xml:space="preserve"><value>Clear Filters</value></data>
+
+  <data name="Filter_Age" xml:space="preserve"><value>Age</value></data>
+  <data name="Filter_All" xml:space="preserve"><value>All</value></data>
+  <data name="Filter_Stale" xml:space="preserve"><value>Stale (older than)</value></data>
+  <data name="Filter_New" xml:space="preserve"><value>New (within)</value></data>
+  <data name="Filter_OlderThan" xml:space="preserve"><value>Older than (days)</value></data>
+  <data name="Filter_NewerThan" xml:space="preserve"><value>Newer than (days)</value></data>
+  <data name="Filter_Days" xml:space="preserve"><value>days</value></data>
+  <data name="Filter_MinSize" xml:space="preserve"><value>Min size (bytes)</value></data>
+  <data name="Filter_Bytes" xml:space="preserve"><value>bytes</value></data>
+  <data name="Filter_Extension" xml:space="preserve"><value>Extension</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>Name search</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>filename…</value></data>
+
+  <data name="Col_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Col_Ext" xml:space="preserve"><value>Ext</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Modified</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Path</value></data>
+
+  <data name="Selection" xml:space="preserve"><value>{0} selected ({1})</value></data>
+  <data name="TotalFiles" xml:space="preserve"><value>{0} files</value></data>
+  <data name="ShowingOf" xml:space="preserve"><value>Showing {0} of {1} files</value></data>
+  <data name="Filter_Folders" xml:space="preserve"><value>Folders</value></data>
+  <data name="ProgressFiles" xml:space="preserve"><value>{0} files processed</value></data>
+  <data name="Progress_Files" xml:space="preserve"><value>files</value></data>
+  <data name="Progress_Dirs" xml:space="preserve"><value>dirs</value></data>
+  <data name="Progress_Counting" xml:space="preserve"><value>Counting directories…</value></data>
+  <data name="Col_LastAccess" xml:space="preserve"><value>Last Access</value></data>
+  <data name="LimitReached" xml:space="preserve"><value>Scan stopped at {0} files to prevent memory issues. Narrow your directory or use exclusion rules.</value></data>
+
+  <data name="Btn_MoveToTrash" xml:space="preserve"><value>Move to Trash</value></data>
+  <data name="Btn_DeletePermanently" xml:space="preserve"><value>Delete Permanently</value></data>
+
+  <data name="ScanComplete" xml:space="preserve"><value>Scan complete — {0} items found</value></data>
+  <data name="ScanCancelled" xml:space="preserve"><value>Scan cancelled</value></data>
+  <data name="ScanFailed" xml:space="preserve"><value>Scan failed: {0}</value></data>
+  <data name="MovedToTrash" xml:space="preserve"><value>Moved to trash</value></data>
+  <data name="MovedToTrashCount" xml:space="preserve"><value>{0} items moved to trash</value></data>
+  <data name="TrashPartialError" xml:space="preserve"><value>{0} items could not be moved to trash</value></data>
+  <data name="DeletedCount" xml:space="preserve"><value>{0} items permanently deleted</value></data>
+  <data name="DeletePartialError" xml:space="preserve"><value>{0} items could not be deleted</value></data>
+
+  <data name="Dialog_DeleteTitle" xml:space="preserve"><value>Confirm Delete</value></data>
+  <data name="Dialog_DeletePrompt" xml:space="preserve"><value>Permanently delete {0} selected item(s)?</value></data>
+  <data name="Dialog_SystemProtectedWarning" xml:space="preserve"><value>⚠ Some selected files are system-protected. Deleting them may destabilise your OS.</value></data>
+  <data name="Dialog_TypePrompt" xml:space="preserve"><value>Type {0} to confirm:</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Dialog_DeleteConfirm" xml:space="preserve"><value>Delete</value></data>
+  <data name="InaccessibleCount" xml:space="preserve"><value>{0} inaccessible path(s)</value></data>
+  <data name="Btn_Export" xml:space="preserve"><value>Export</value></data>
+  <data name="Export_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="Export_Format_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="ExportSuccess" xml:space="preserve"><value>Exported {0} files → {1}</value></data>
+  <data name="ExportFailed" xml:space="preserve"><value>Export failed: {0}</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Export Scan Results</value></data>
+  <data name="Export_Filename" xml:space="preserve"><value>File name</value></data>
+  <data name="Export_FormatLabel" xml:space="preserve"><value>Format</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>{0} files will be exported</value></data>
+  <data name="DirNotFound" xml:space="preserve"><value>Directory "{0}" no longer exists and has been removed from your watch list.</value></data>
+  <data name="Btn_AddDirectory" xml:space="preserve"><value>Add Directory</value></data>
+  <data name="DirAlreadyAdded" xml:space="preserve"><value>Directory already in list</value></data>
+  <data name="DirAdded" xml:space="preserve"><value>Directory added</value></data>
+</root>

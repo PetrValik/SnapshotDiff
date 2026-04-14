@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<data name="PageTitle" xml:space="preserve">
+		<value>Koš</value>
+	</data>
+	<data name="Empty_Title" xml:space="preserve">
+		<value>Koš je prázdný</value>
+	</data>
+	<data name="Empty_Desc" xml:space="preserve">
+		<value>Soubory přesunuté do koše se zobrazí zde. Jsou automaticky odstraněny po 30 dnech.</value>
+	</data>
+	<data name="Btn_EmptyTrash" xml:space="preserve">
+		<value>Vysypat koš</value>
+	</data>
+	<data name="Btn_Restore" xml:space="preserve">
+		<value>Obnovit</value>
+	</data>
+	<data name="Btn_Delete" xml:space="preserve">
+		<value>Smazat</value>
+	</data>
+	<data name="Col_Name" xml:space="preserve">
+		<value>Název</value>
+	</data>
+	<data name="Col_OriginalPath" xml:space="preserve">
+		<value>Původní cesta</value>
+	</data>
+	<data name="Col_DeletedAt" xml:space="preserve">
+		<value>Smazáno</value>
+	</data>
+	<data name="Col_ExpiresAt" xml:space="preserve">
+		<value>Vyprší</value>
+	</data>
+	<data name="Col_Size" xml:space="preserve">
+		<value>Velikost</value>
+	</data>
+	<data name="EmptyDialog_Title" xml:space="preserve">
+		<value>Vysypat koš?</value>
+	</data>
+	<data name="EmptyDialog_Body" xml:space="preserve">
+		<value>Opravdu chcete trvale smazat všechny položky z koše? Tuto akci nelze vrátit zpět.</value>
+	</data>
+	<data name="EmptyDialog_Confirm" xml:space="preserve">
+		<value>Vysypat vše</value>
+	</data>
+	<data name="DeleteDialog_Title" xml:space="preserve">
+		<value>Trvale smazat?</value>
+	</data>
+	<data name="DeleteDialog_Body" xml:space="preserve">
+		<value>Opravdu chcete trvale smazat</value>
+	</data>
+	<data name="DeleteDialog_Body2" xml:space="preserve">
+		<value>? Tuto akci nelze vrátit zpět.</value>
+	</data>
+	<data name="DeleteDialog_Confirm" xml:space="preserve">
+		<value>Smazat</value>
+	</data>
+	<data name="Notify_Restored" xml:space="preserve">
+		<value>Soubor byl obnoven.</value>
+	</data>
+	<data name="Notify_Deleted" xml:space="preserve">
+		<value>Položka byla trvale smazána.</value>
+	</data>
+	<data name="Notify_Emptied" xml:space="preserve">
+		<value>Koš byl vysypán.</value>
+	</data>
+</root>

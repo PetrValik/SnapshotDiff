@@ -1,0 +1,35 @@
+@namespace SnapshotDiff.Shared.UI.Components
+
+<button class="btn @VariantClass @SizeClass @Class"
+        disabled="@Disabled"
+        type="@Type"
+        @onclick="OnClick"
+        @attributes="AdditionalAttributes">
+    @if (Loading)
+    {
+        <span class="spinner w-3 h-3"></span>
+    }
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Variant { get; set; } = "secondary"; // primary|secondary|danger|ghost
+    [Parameter] public string Size { get; set; } = "md"; // sm|md
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public string Type { get; set; } = "button";
+    [Parameter] public string Class { get; set; } = "";
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string VariantClass => Variant switch
+    {
+        "primary" => "btn-primary",
+        "danger"  => "btn-danger",
+        "ghost"   => "btn-ghost",
+        _         => "btn-secondary"
+    };
+
+    private string SizeClass => Size == "sm" ? "btn-sm" : "";
+}

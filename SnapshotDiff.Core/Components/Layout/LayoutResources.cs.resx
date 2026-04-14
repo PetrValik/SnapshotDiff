@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	
+	<!-- Application -->
+	<data name="AppName" xml:space="preserve">
+		<value>SnapshotDiff</value>
+	</data>
+	
+	<!-- Reconnect Modal -->
+	<data name="ReconnectMessage" xml:space="preserve">
+		<value>Připojování k serveru...</value>
+	</data>
+	<data name="ReconnectRetrying" xml:space="preserve">
+		<value>Připojení selhalo... zkouším znovu za chvíli.</value>
+	</data>
+	<data name="ReconnectFailed" xml:space="preserve">
+		<value>Připojení selhalo. Prosím zkuste to znovu nebo obnovte stránku.</value>
+	</data>
+	<data name="RetryButton" xml:space="preserve">
+		<value>Zkusit znovu</value>
+	</data>
+	<data name="SessionPaused" xml:space="preserve">
+		<value>Relace byla pozastavena serverem.</value>
+	</data>
+	<data name="ResumeFailed" xml:space="preserve">
+		<value>Obnovení relace selhalo. Prosím zkuste to znovu nebo obnovte stránku.</value>
+	</data>
+	<data name="ResumeButton" xml:space="preserve">
+		<value>Obnovit</value>
+	</data>
+
+	<!-- Navigation -->
+	<data name="Nav_Scan" xml:space="preserve">
+		<value>Skenování</value>
+	</data>
+	<data name="Nav_Trash" xml:space="preserve">
+		<value>Koš</value>
+	</data>
+	<data name="Nav_Settings" xml:space="preserve">
+		<value>Nastavení</value>
+	</data>
+	<data name="Nav_Exclusions" xml:space="preserve">
+		<value>Výjimky</value>
+	</data>
+	<!-- Delete confirmation dialog -->
+	<data name="Dialog_Delete_Title" xml:space="preserve">
+		<value>Potvrdit smazání</value>
+	</data>
+	<data name="Dialog_Delete_Prompt" xml:space="preserve">
+		<value>Opravdu chcete trvale smazat</value>
+	</data>
+	<data name="Dialog_Delete_Confirm" xml:space="preserve">
+		<value>Smazat</value>
+	</data>
+	<data name="Dialog_Cancel" xml:space="preserve">
+		<value>Zrušit</value>
+	</data>
+	<data name="Dialog_SystemProtected_Title" xml:space="preserve">
+		<value>⚠ Varování: systémový soubor</value>
+	</data>
+	<data name="Dialog_SystemProtected_Warning" xml:space="preserve">
+		<value>Tento soubor je chráněn systémovým pravidlem. Smazání systémových souborů může způsobit nestabilitu nebo nespustitelnost OS.</value>
+	</data>
+	<data name="Dialog_SystemProtected_TypePrompt" xml:space="preserve">
+		<value>Pro pokračování napište {0} do pole níže:</value>
+	</data>
+	<data name="Nav_AppVersion" xml:space="preserve">
+		<value>v0.1.0-dev</value>
+	</data>
+</root>

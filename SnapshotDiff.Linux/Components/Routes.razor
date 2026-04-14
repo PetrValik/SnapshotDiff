@@ -1,0 +1,47 @@
+﻿@using System.Globalization
+@inject SnapshotDiff.Infrastructure.Localization.CultureState CultureState
+@implements IDisposable
+
+<Router @key="_cultureVersion"
+        AppAssembly="typeof(Program).Assembly"
+        AdditionalAssemblies="new[] { typeof(SnapshotDiff.Features.Scanner.UI.Pages.ScanPage).Assembly }">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(SnapshotDiff.Components.Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="typeof(SnapshotDiff.Components.Layout.MainLayout)">
+            <p>Page not found.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private int _cultureVersion;
+
+    protected override void OnInitialized()
+    {
+        CultureState.OnChanged += HandleCultureChanged;
+    }
+
+    private void HandleCultureChanged()
+    {
+        _ = InvokeAsync(() =>
+        {
+            try
+            {
+                var ci = new CultureInfo(CultureState.Culture);
+                Thread.CurrentThread.CurrentCulture = ci;
+                Thread.CurrentThread.CurrentUICulture = ci;
+                _cultureVersion = CultureState.Version;
+                StateHasChanged();
+            }
+            catch (ObjectDisposedException) { }
+        });
+    }
+
+    public void Dispose()
+    {
+        CultureState.OnChanged -= HandleCultureChanged;
+    }
+}

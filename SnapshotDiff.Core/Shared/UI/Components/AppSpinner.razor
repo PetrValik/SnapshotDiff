@@ -1,0 +1,16 @@
+@namespace SnapshotDiff.Shared.UI.Components
+
+<span class="spinner @SizeClass @Class" style="@Style" role="status" aria-label="Loading"></span>
+
+@code {
+    [Parameter] public string Size { get; set; } = "md"; // sm|md|lg
+    [Parameter] public string Class { get; set; } = "";
+    [Parameter] public string Style { get; set; } = "";
+
+    private string SizeClass => Size switch
+    {
+        "sm" => "w-3 h-3",
+        "lg" => "w-8 h-8",
+        _    => "w-5 h-5"
+    };
+}

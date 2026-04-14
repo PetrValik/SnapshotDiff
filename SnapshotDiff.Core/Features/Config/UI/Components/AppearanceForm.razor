@@ -1,0 +1,14 @@
+@using SnapshotDiff.Features.Config.Domain
+@using SnapshotDiff.Features.Config.UI
+@inject IStringLocalizer<SettingsResources> Loc
+
+<div class="appearance-form">
+    <div class="form-group">
+        <label class="form-label">@Loc["Appearance_Theme"]</label>
+        <select class="app-select" @bind="_theme" @bind:after="OnThemeChangedAsync">
+            <option value="system">🖥 @Loc["Appearance_System"]</option>
+            <option value="light">☀️ @Loc["Appearance_Light"]</option>
+            <option value="dark">🌙 @Loc["Appearance_Dark"]</option>
+        </select>
+    </div>
+</div>

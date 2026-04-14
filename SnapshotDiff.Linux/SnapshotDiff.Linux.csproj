@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SnapshotDiff.Linux</RootNamespace>
+    <AssemblyName>SnapshotDiff.Linux</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Photino.Blazor" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SnapshotDiff.Core\SnapshotDiff.App.csproj" />
+  </ItemGroup>
+
+  <!-- Copy wwwroot from the App (Razor Class Library) -->
+  <Target Name="CopyAppWwwroot" AfterTargets="Build">
+    <ItemGroup>
+      <AppWwwrootFiles Include="..\SnapshotDiff.Core\wwwroot\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AppWwwrootFiles)"
+          DestinationFolder="$(OutputPath)wwwroot\%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

@@ -1,0 +1,430 @@
+@page "/"
+@using SnapshotDiff.Features.Config.Domain
+@using SnapshotDiff.Features.Scanner.Application.Queries
+@using SnapshotDiff.Features.Scanner.Domain
+@using SnapshotDiff.Features.Scanner.UI.Components
+@using SnapshotDiff.Infrastructure.Storage
+
+<PageTitle>@Loc["PageTitle"] – SnapshotDiff</PageTitle>
+
+<div class="scan-page flex flex-col h-full overflow-hidden">
+
+    <!-- Top bar: directory selector + scan button + progress -->
+    <div class="flex items-center gap-3 px-4 py-3 border-b shrink-0" style="border-color: var(--border); background: var(--bg-topbar)">
+        <select class="app-select flex-1 min-w-0" @bind="_selectedPath" disabled="@_isScanning">
+            @if (!_watchedDirs.Any())
+            {
+                <option value="">@Loc["NoDirectories"]</option>
+            }
+            else
+            {
+                @foreach (var dir in _watchedDirs)
+                {
+                    <option value="@dir.Path">@dir.DisplayName</option>
+                }
+            }
+        </select>
+
+        @if (FolderPicker.IsSupported)
+        {
+            <button class="app-btn app-btn--ghost" @onclick="AddDirectoryAsync" disabled="@_isScanning"
+                    title="@Loc["Btn_AddDirectory"]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m3-3H9m-4 7h14a2 2 0 002-2V8a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+            </button>
+        }
+
+        <button class="app-btn app-btn--primary" @onclick="OnScanAsync" disabled="@(_isScanning || string.IsNullOrEmpty(_selectedPath))">
+            @if (_isScanning)
+            {
+                <svg class="w-4 h-4 animate-spin shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>@Loc["Scanning"]</span>
+            }
+            else
+            {
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>@Loc["Scan"]</span>
+            }
+        </button>
+
+        @if (_isScanning)
+        {
+            <button class="app-btn app-btn--ghost" @onclick="CancelScan">@Loc["Cancel"]</button>
+        }
+    </div>
+
+    <!-- Progress bar (always reserve space to prevent layout shift) -->
+    <div class="h-1.5 shrink-0 overflow-hidden" style="background: var(--bg-main)">
+        @if (_isScanning && _scanProgress?.Phase == ScanPhase.Counting)
+        {
+            <div class="h-full w-full" style="background: linear-gradient(90deg, var(--accent) 25%, transparent 25%, transparent 50%, var(--accent) 50%, var(--accent) 75%, transparent 75%); background-size: 1rem 100%; animation: progress-stripe 0.75s linear infinite"></div>
+        }
+        else if (_isScanning)
+        {
+            <div class="h-full transition-all duration-300" style="background: var(--accent); width: @(ProgressPercent)%"></div>
+        }
+    </div>
+    <div class="flex items-center gap-3 px-4 h-7 text-xs shrink-0" style="color: var(--text-secondary)">
+        @if (_isScanning && _scanProgress?.Phase == ScanPhase.Counting)
+        {
+            <span class="font-medium" style="color: var(--accent)">@Loc["Progress_Counting"]</span>
+            <span class="tabular-nums" style="color: var(--text)">@((_scanProgress?.ProcessedDirectories ?? 0).ToString("N0")) @Loc["Progress_Dirs"]</span>
+            <span class="truncate flex-1 text-right opacity-60">@(_scanProgress?.CurrentDirectory ?? "")</span>
+        }
+        else if (_isScanning && _scanProgress is not null)
+        {
+            <span class="font-medium tabular-nums" style="color: var(--accent)">@ProgressPercent% · @_scanProgress.ProcessedFiles.ToString("N0") @Loc["Progress_Files"]</span>
+            <span>·</span>
+            <span class="tabular-nums" style="color: var(--text)">@_scanProgress.ProcessedDirectories.ToString("N0") @Loc["Progress_Dirs"]</span>
+            <span>·</span>
+            <span class="tabular-nums" style="color: var(--text)">@_scanProgress.ElapsedSeconds.ToString("F1")s</span>
+            @if (_scanProgress.ElapsedSeconds > 0.5)
+            {
+                <span>·</span>
+                <span class="tabular-nums" style="color: var(--text)">@((int)(_scanProgress.ProcessedFiles / _scanProgress.ElapsedSeconds))/s</span>
+            }
+            <span class="truncate flex-1 text-right opacity-60">@_scanProgress.CurrentDirectory</span>
+        }
+        else if (_isScanning)
+        {
+            <span>@Loc["Scanning"]</span>
+        }
+    </div>
+
+    <!-- Main body: filter panel + file list -->
+    <div class="flex flex-1 min-h-0">
+
+        <!-- Left filter panel -->
+        <aside class="flex flex-col w-56 shrink-0 border-r" style="border-color: var(--border); background: var(--bg-topbar)">
+
+            <!-- Scrollable filter content -->
+            <div class="flex-1 min-h-0 overflow-y-auto">
+
+                <!-- Directory tree -->
+                @if (_directoryTree is not null)
+                {
+                    <div class="px-3 pt-3 pb-2 border-b" style="border-color: var(--border)">
+                        <div class="filter-label mb-1">@Loc["Filter_Folders"]</div>
+                        <div class="-mx-1">
+                            <DirectoryTree Nodes="@(new List<DirectoryNode> { _directoryTree })"
+                                           SelectedPath="@(_selectedSubDir ?? string.Empty)"
+                                           OnSelectDirectory="OnSelectDirectory" />
+                        </div>
+                    </div>
+                }
+
+                <!-- Extension chips -->
+                @if (_topExtensions.Count > 0)
+                {
+                    <div class="px-3 py-2 border-b" style="border-color: var(--border)">
+                        <div class="filter-label mb-1">@Loc["Filter_Extension"]</div>
+                        <div class="flex flex-wrap gap-1">
+                            @foreach (var ext in _topExtensions)
+                            {
+                                var isActive = _activeExtensions.Contains(ext.Extension);
+                                <button class="@(isActive ? "app-btn app-btn--xs app-btn--primary" : "app-btn app-btn--xs app-btn--ghost")"
+                                        @onclick="() => ToggleExtension(ext.Extension)"
+                                        title="@ext.Count @Loc["Progress_Files"]">
+                                    @ext.Extension <span class="opacity-50">@ext.Count</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Compact filters -->
+                <div class="px-3 py-2 space-y-3">
+
+                    <div>
+                        <div class="filter-label">@Loc["Filter_Age"]</div>
+                        <div class="flex flex-col gap-1 mt-1">
+                            <label class="filter-radio">
+                                <input type="radio" name="age" value="All" @onchange="() => SetAgeFilter(FileAgeFilter.All)" checked="@(_ageFilter == FileAgeFilter.All)" /> @Loc["Filter_All"]
+                            </label>
+                            <label class="filter-radio">
+                                <input type="radio" name="age" value="Stale" @onchange="() => SetAgeFilter(FileAgeFilter.Stale)" checked="@(_ageFilter == FileAgeFilter.Stale)" /> @Loc["Filter_Stale"]
+                            </label>
+                            <label class="filter-radio">
+                                <input type="radio" name="age" value="New" @onchange="() => SetAgeFilter(FileAgeFilter.New)" checked="@(_ageFilter == FileAgeFilter.New)" /> @Loc["Filter_New"]
+                            </label>
+                        </div>
+                    </div>
+
+                    @if (_ageFilter == FileAgeFilter.Stale)
+                    {
+                        <div>
+                            <div class="flex flex-wrap gap-1">
+                                <button class="@ThresholdClass(180)" @onclick="() => SetStaleDays(180)">6m</button>
+                                <button class="@ThresholdClass(365)" @onclick="() => SetStaleDays(365)">1y</button>
+                                <button class="@ThresholdClass(730)" @onclick="() => SetStaleDays(730)">2y</button>
+                            </div>
+                            <input type="number" class="app-input mt-1 w-full" placeholder="@Loc["Filter_Days"]"
+                                   value="@_staleAfterDays" @onchange="e => OnStaleDaysChanged(e)" min="1" />
+                        </div>
+                    }
+
+                    @if (_ageFilter == FileAgeFilter.New)
+                    {
+                        <div>
+                            <div class="flex flex-wrap gap-1">
+                                <button class="@ThresholdClass(7)" @onclick="() => SetNewDays(7)">7d</button>
+                                <button class="@ThresholdClass(30)" @onclick="() => SetNewDays(30)">30d</button>
+                                <button class="@ThresholdClass(90)" @onclick="() => SetNewDays(90)">90d</button>
+                            </div>
+                            <input type="number" class="app-input mt-1 w-full" placeholder="@Loc["Filter_Days"]"
+                                   value="@_newWithinDays" @onchange="e => OnNewDaysChanged(e)" min="1" />
+                        </div>
+                    }
+
+                    <div>
+                        <div class="filter-label">@Loc["Filter_MinSize"]</div>
+                        <input type="number" class="app-input w-full mt-1" placeholder="@Loc["Filter_Bytes"]"
+                               value="@_minSizeBytes" @onchange="e => OnMinSizeChanged(e)" min="0" />
+                    </div>
+
+                    <div>
+                        <div class="filter-label">@Loc["Filter_Name"]</div>
+                        <input type="text" class="app-input w-full mt-1" placeholder="@Loc["Filter_NamePlaceholder"]"
+                               value="@_nameSearch"
+                               @oninput="e => { _nameSearch = e.Value?.ToString() ?? string.Empty; ApplyFilters(); }" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Clear Filters at bottom -->
+            <div class="px-3 flex items-center h-10 border-t shrink-0" style="border-color: var(--border)">
+                <button class="app-btn app-btn--ghost w-full app-btn--xs" @onclick="ClearFilters">@Loc["ClearFilters"]</button>
+            </div>
+        </aside>
+
+        <!-- File list -->
+        <div class="flex flex-col flex-1 min-w-0">
+
+            <!-- Breadcrumb bar -->
+            @if (_selectedSubDir is not null)
+            {
+                <div class="flex items-center gap-1 px-4 py-1.5 text-xs border-b shrink-0" style="border-color: var(--border); background: var(--bg-card)">
+                    <button class="hover:underline cursor-pointer" style="color: var(--accent);"
+                            @onclick='() => OnSelectDirectory("")'>
+                        📁 @(_directoryTree?.Name ?? "Root")
+                    </button>
+                    @foreach (var seg in GetBreadcrumbs())
+                    {
+                        <span style="color: var(--text-muted)">›</span>
+                        <button class="hover:underline cursor-pointer truncate" style="color: var(--accent);"
+                                @onclick="() => OnSelectDirectory(seg.Path)">
+                            @seg.Name
+                        </button>
+                    }
+                </div>
+            }
+            @if (_scanResult is null && !_isScanning)
+            {
+                <div class="flex flex-col items-center justify-center flex-1 gap-3" style="color: var(--text-muted)">
+                    <svg class="w-12 h-12 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <p>@Loc["EmptyState"]</p>
+                </div>
+            }
+            else if (_filteredEntries.Count == 0 && !_isScanning)
+            {
+                <div class="flex flex-col items-center justify-center flex-1 gap-2" style="color: var(--text-muted)">
+                    <p>@Loc["NoResults"]</p>
+                </div>
+            }
+            else
+            {
+                <!-- Table header -->
+                <div class="overflow-x-auto flex-1 min-h-0 overflow-y-auto">
+                    <table class="w-full text-sm" style="table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 32px;" />
+                            <col />
+                            <col class="hidden md:table-column" style="width: 72px;" />
+                            <col style="width: 90px;" />
+                            <col class="hidden lg:table-column" style="width: 140px;" />
+                            <col class="hidden xl:table-column" style="width: 140px;" />
+                            <col class="hidden 2xl:table-column" />
+                            <col style="width: 52px;" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="px-2 py-2 sticky top-0 z-10" style="background: var(--bg-topbar)">
+                                    <input type="checkbox" @onchange="ToggleSelectAll"
+                                           checked="@(_selectedPaths.Count == _filteredEntries.Count && _filteredEntries.Count > 0)" />
+                                </th>
+                                <th class="px-2 py-2 text-left cursor-pointer select-none truncate sticky top-0 z-10" style="background: var(--bg-topbar)" @onclick="() => SetSort(SortField.Name)">
+                                    @Loc["Col_Name"] @SortIndicator(SortField.Name)
+                                </th>
+                                <th class="px-2 py-2 text-left cursor-pointer select-none hidden md:table-cell sticky top-0 z-10" style="background: var(--bg-topbar)" @onclick="() => SetSort(SortField.Extension)">
+                                    @Loc["Col_Ext"] @SortIndicator(SortField.Extension)
+                                </th>
+                                <th class="px-2 py-2 text-right cursor-pointer select-none sticky top-0 z-10" style="background: var(--bg-topbar)" @onclick="() => SetSort(SortField.Size)">
+                                    @Loc["Col_Size"] @SortIndicator(SortField.Size)
+                                </th>
+                                <th class="px-2 py-2 text-left cursor-pointer select-none hidden lg:table-cell sticky top-0 z-10" style="background: var(--bg-topbar)" @onclick="() => SetSort(SortField.LastWriteTime)">
+                                    @Loc["Col_Modified"] @SortIndicator(SortField.LastWriteTime)
+                                </th>
+                                <th class="px-2 py-2 text-left cursor-pointer select-none hidden xl:table-cell sticky top-0 z-10" style="background: var(--bg-topbar)" @onclick="() => SetSort(SortField.LastAccessTime)">
+                                    @Loc["Col_LastAccess"] @SortIndicator(SortField.LastAccessTime)
+                                </th>
+                                <th class="px-2 py-2 text-left hidden 2xl:table-cell truncate sticky top-0 z-10" style="background: var(--bg-topbar)">@Loc["Col_Path"]</th>
+                                <th class="px-2 py-2 sticky top-0 z-10" style="background: var(--bg-topbar)"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <Virtualize Items="@_filteredEntries" Context="entry" ItemSize="33" OverscanCount="10">
+                                <tr class="file-row @(IsSelected(entry.FullPath) ? "file-row--selected" : "")">
+                                    <td class="px-2 py-1 text-center">
+                                        <input type="checkbox" checked="@IsSelected(entry.FullPath)"
+                                               @onchange="() => ToggleEntry(entry.FullPath)" />
+                                    </td>
+                                    <td class="px-2 py-1 truncate overflow-hidden" style="color: var(--text)">
+                                        <span title="@entry.FullPath">@entry.Name</span>
+                                    </td>
+                                    <td class="px-2 py-1 hidden md:table-cell truncate" style="color: var(--text-secondary)">
+                                        @entry.Extension
+                                    </td>
+                                    <td class="px-2 py-1 text-right tabular-nums" style="color: var(--text-secondary)">
+                                        @FormatSize(entry.Size)
+                                    </td>
+                                    <td class="px-2 py-1 hidden lg:table-cell tabular-nums" style="color: var(--text-secondary)">
+                                        @entry.LastWriteTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                                    </td>
+                                    <td class="px-2 py-1 hidden xl:table-cell tabular-nums" style="color: var(--text-secondary)"
+                                        title="@Loc["Col_LastAccess"]">
+                                        @entry.LastAccessTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                                    </td>
+                                    <td class="px-2 py-1 hidden 2xl:table-cell text-xs truncate overflow-hidden" style="color: var(--text-secondary)">
+                                        <span title="@entry.FullPath">@entry.RelativePath</span>
+                                    </td>
+                                    <td class="px-2 py-1 text-right">
+                                        <button class="app-btn app-btn--ghost app-btn--xs" style="color: var(--text)" @onclick="() => TrashSingleAsync(entry.FullPath)"
+                                                title="@Loc["Btn_MoveToTrash"]">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </Virtualize>
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Bottom action bar -->
+            @if (_scanResult is not null)
+            {
+                <div class="flex items-center gap-3 px-4 h-10 border-t shrink-0" style="border-color: var(--border); background: var(--bg-topbar)">
+                    <span class="text-sm" style="color: var(--text-secondary)">
+                        @Loc["Selection", _selectedPaths.Count, FormatSize(_selectedTotalSize)]
+                    </span>
+                    <span class="text-sm tabular-nums" style="color: var(--text-secondary)">
+                        | @Loc["ShowingOf", _filteredEntries.Count.ToString("N0"), TotalScanEntries.ToString("N0")]
+                    </span>
+                    <div class="flex-1"></div>
+                    <button class="app-btn app-btn--secondary app-btn--xs" disabled="@(_selectedPaths.Count == 0)"
+                            @onclick="MoveSelectionToTrashAsync">
+                        @Loc["Btn_MoveToTrash"]
+                    </button>
+                    <button class="app-btn app-btn--danger app-btn--xs" disabled="@(_selectedPaths.Count == 0)"
+                            @onclick="DeleteSelectionPermanentlyAsync">
+                        @Loc["Btn_DeletePermanently"]
+                    </button>
+                    <button class="app-btn app-btn--ghost app-btn--xs" disabled="@(_filteredEntries.Count == 0)"
+                            @onclick="OpenExportDialog">
+                        @Loc["Btn_Export"]
+                    </button>
+                </div>
+
+                @if (_scanResult.InaccessiblePaths.Count > 0)
+                {
+                    <details class="px-4 py-2 border-t text-xs shrink-0" style="border-color: var(--border); color: var(--text-muted)">
+                        <summary class="cursor-pointer">@Loc["InaccessibleCount", _scanResult.InaccessiblePaths.Count]</summary>
+                        <ul class="mt-1 max-h-24 overflow-y-auto space-y-0.5">
+                            @foreach (var p in _scanResult.InaccessiblePaths)
+                            {
+                                <li class="truncate">@p</li>
+                            }
+                        </ul>
+                    </details>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Confirm delete dialog -->
+@if (_showDeleteConfirm)
+{
+    <div class="dialog-backdrop" @onclick="CancelDelete">
+        <div class="dialog" @onclick:stopPropagation>
+            <h3 class="dialog-title">@Loc["Dialog_DeleteTitle"]</h3>
+            <p class="dialog-body">@Loc["Dialog_DeletePrompt", _selectedPaths.Count]</p>
+            @if (_hasSystemProtected)
+            {
+                <div class="dialog-warning">
+                    <strong>@Loc["Dialog_SystemProtectedWarning"]</strong>
+                </div>
+                <div class="mt-3">
+                    <label class="text-sm">@string.Format(Loc["Dialog_TypePrompt"], "DELETE")</label>
+                    <input type="text" class="app-input w-full mt-1" @bind="_deleteConfirmText" placeholder="DELETE" />
+                </div>
+            }
+            <div class="dialog-actions">
+                <button class="app-btn app-btn--ghost" @onclick="CancelDelete">@Loc["Dialog_Cancel"]</button>
+                <button class="app-btn app-btn--danger"
+                        disabled="@(_hasSystemProtected && _deleteConfirmText != "DELETE")"
+                        @onclick="ConfirmDeleteAsync">
+                    @Loc["Dialog_DeleteConfirm"]
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Export dialog -->
+@if (_showExportDialog)
+{
+    <div class="dialog-backdrop" @onclick="CancelExport">
+        <div class="dialog" @onclick:stopPropagation>
+            <h3 class="dialog-title">@Loc["Export_Title"]</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-medium" style="color: var(--text-secondary)">@Loc["Export_Filename"]</label>
+                    <input type="text" class="app-input w-full mt-1" @bind="_exportFileName" />
+                </div>
+                <div>
+                    <label class="text-sm font-medium" style="color: var(--text-secondary)">@Loc["Export_FormatLabel"]</label>
+                    <div class="flex gap-3 mt-1">
+                        <label class="filter-radio">
+                            <input type="radio" name="exportFormat" value="Json" checked="@(_exportFormat == "Json")"
+                                   @onchange='() => { _exportFormat = "Json"; UpdateExportExtension(); }' /> JSON
+                        </label>
+                        <label class="filter-radio">
+                            <input type="radio" name="exportFormat" value="Csv" checked="@(_exportFormat == "Csv")"
+                                   @onchange='() => { _exportFormat = "Csv"; UpdateExportExtension(); }' /> CSV
+                        </label>
+                    </div>
+                </div>
+                <div class="text-sm" style="color: var(--text-muted)">
+                    @Loc["Export_Preview", _filteredEntries.Count]
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button class="app-btn app-btn--ghost" @onclick="CancelExport">@Loc["Dialog_Cancel"]</button>
+                <button class="app-btn app-btn--primary" disabled="@(_isExporting || string.IsNullOrWhiteSpace(_exportFileName))"
+                        @onclick="ConfirmExportAsync">
+                    @if (_isExporting) { <span>…</span> } else { <span>@Loc["Btn_Export"]</span> }
+                </button>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,100 @@
+@page "/trash"
+@using SnapshotDiff.Features.Trash.Domain
+@using SnapshotDiff.Features.Trash.Application.Commands
+@using SnapshotDiff.Features.Trash.Application.Queries
+
+<PageTitle>@Loc["PageTitle"] – SnapshotDiff</PageTitle>
+
+<div class="page">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="page-title">@Loc["PageTitle"]</h2>
+        @if (!_loading && _items.Count > 0)
+        {
+            <AppButton Variant="danger" OnClick="AskEmptyTrash">@Loc["Btn_EmptyTrash"]</AppButton>
+        }
+    </div>
+
+    @if (_loading)
+    {
+        <div class="flex justify-center py-12">
+            <AppSpinner />
+        </div>
+    }
+    else if (_items.Count == 0)
+    {
+        <AppEmptyState Title="@Loc["Empty_Title"]"
+                       Description="@Loc["Empty_Desc"]" />
+    }
+    else
+    {
+        <div class="space-y-2">
+            @foreach (var item in _items)
+            {
+                <div class="card p-3 flex items-center gap-4">
+                    <div class="shrink-0">
+                        @if (item.IsDirectory)
+                        {
+                            <!-- folder icon -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent)">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                            </svg>
+                        }
+                        else
+                        {
+                            <!-- file icon -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-muted)">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        }
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium truncate" style="color: var(--text)" title="@item.OriginalPath">
+                            @item.Name
+                        </div>
+                        <div class="text-xs truncate" style="color: var(--text-muted)" title="@item.OriginalPath">
+                            @item.OriginalPath
+                        </div>
+                        <div class="text-xs mt-0.5" style="color: var(--text-muted)">
+                            @Loc["Col_DeletedAt"]: @item.DeletedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ·
+                            @Loc["Col_ExpiresAt"]: @item.ExpiresAt.ToLocalTime().ToString("dd.MM.yyyy") ·
+                            @FormatSize(item.SizeBytes)
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 shrink-0">
+                        <AppButton Size="sm" Variant="secondary" OnClick="() => RestoreItem(item.Id)">
+                            @Loc["Btn_Restore"]
+                        </AppButton>
+                        <AppButton Size="sm" Variant="danger" OnClick="() => AskDeletePermanently(item)">
+                            @Loc["Btn_Delete"]
+                        </AppButton>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Confirm empty trash -->
+<AppDialog IsOpen="_showEmptyConfirm"
+           IsOpenChanged="v => _showEmptyConfirm = v"
+           Title="@Loc["EmptyDialog_Title"]"
+           ConfirmText="@Loc["EmptyDialog_Confirm"]"
+           ConfirmVariant="danger"
+           OnConfirm="ConfirmEmptyTrash">
+    <p>@Loc["EmptyDialog_Body"]</p>
+</AppDialog>
+
+<!-- Confirm permanent delete -->
+<AppDialog IsOpen="_showDeleteConfirm"
+           IsOpenChanged="v => _showDeleteConfirm = v"
+           Title="@Loc["DeleteDialog_Title"]"
+           ConfirmText="@Loc["DeleteDialog_Confirm"]"
+           ConfirmVariant="danger"
+           OnConfirm="ConfirmDeletePermanently">
+    @if (_deleteTarget is not null)
+    {
+        <p>@Loc["DeleteDialog_Body"] <strong>@_deleteTarget.Name</strong>@Loc["DeleteDialog_Body2"]</p>
+    }
+</AppDialog>

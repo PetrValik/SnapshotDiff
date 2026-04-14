@@ -1,0 +1,107 @@
+/* Custom Slider - připraveno pro váš design */
+.custom-slider {
+    width: 100%;
+    padding: 12px 0;
+}
+
+.slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #cccccc;
+    font-weight: 500;
+}
+
+.slider-value {
+    color: #4a9eff;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.slider-container {
+    position: relative;
+    height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.slider-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.slider-track {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: #3e3e42;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.slider-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #4a9eff, #00d9ff);
+    transition: width 0.1s ease;
+}
+
+.slider-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border: 3px solid #4a9eff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: left 0.1s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.slider-input:hover + .slider-track + .slider-thumb {
+    border-color: #3a8eef;
+    box-shadow: 0 0 0 4px rgba(74, 158, 255, 0.2);
+}
+
+.slider-input:active + .slider-track + .slider-thumb {
+    transform: translateX(-50%) scale(1.2);
+}
+
+.slider-range {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666666;
+}
+
+/* Volitelné: Dark mode accents */
+.custom-slider.accent-green .slider-progress {
+    background: linear-gradient(90deg, #4caf50, #66bb6a);
+}
+
+.custom-slider.accent-green .slider-thumb {
+    border-color: #4caf50;
+}
+
+.custom-slider.accent-red .slider-progress {
+    background: linear-gradient(90deg, #f44336, #e57373);
+}
+
+.custom-slider.accent-red .slider-thumb {
+    border-color: #f44336;
+}
+
+.custom-slider.accent-yellow .slider-progress {
+    background: linear-gradient(90deg, #ffc107, #ffca28);
+}
+
+.custom-slider.accent-yellow .slider-thumb {
+    border-color: #ffc107;
+}

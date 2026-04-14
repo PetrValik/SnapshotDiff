@@ -1,0 +1,83 @@
+﻿@page "/settings"
+@using SnapshotDiff.Features.Config.Domain
+@using SnapshotDiff.Features.Config.Infrastructure
+@using SnapshotDiff.Features.Config.UI.Components
+@using SnapshotDiff.Components.Shared
+
+<PageTitle>@Loc["PageTitle"] – SnapshotDiff</PageTitle>
+
+<div class="settings-page">
+    <h2 class="settings-title">@Loc["PageTitle"]</h2>
+
+    <section class="settings-section">
+        <h3>@Loc["Section_WatchedDirs"]</h3>
+        <p class="settings-hint">@Loc["WatchedDirs_Hint"]</p>
+
+        @if (ConfigService.Current.WatchedDirectories.Count == 0)
+        {
+            <p class="settings-empty">@Loc["WatchedDirs_Empty"]</p>
+        }
+        else
+        {
+            <div class="watched-dirs-list">
+                @foreach (var dir in ConfigService.Current.WatchedDirectories)
+                {
+                    <WatchedDirectoryRow
+                        Directory="dir"
+                        OnRemove="() => RemoveDirectory(dir.Path)"
+                        OnRename="(label) => RenameDirectory(dir.Path, label)" />
+                }
+            </div>
+        }
+
+        <AddDirectoryForm OnAdd="AddDirectory" />
+    </section>
+
+    <section class="settings-section">
+        <h3>@Loc["Section_DefaultFilters"]</h3>
+        <p class="settings-hint">@Loc["DefaultFilters_Hint"]</p>
+        <div class="form-group">
+            <label class="form-label">@Loc["StaleAfterDays_Label"]</label>
+            <input type="number" class="form-input" min="1"
+                   @bind="_editStaleAfterDays" @bind:event="oninput" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">@Loc["NewWithinDays_Label"]</label>
+            <input type="number" class="form-input" min="1"
+                   @bind="_editNewWithinDays" @bind:event="oninput" />
+        </div>
+        <button class="app-btn app-btn--primary" @onclick="SaveDefaultFiltersAsync"
+                disabled="@(!FiltersChanged)">
+            @Loc["Btn_SaveFilters"]
+        </button>
+    </section>
+
+    <section class="settings-section">
+        <h3>@Loc["Section_Appearance"]</h3>
+        <AppearanceForm Config="ConfigService.Current.Appearance" OnSave="SaveAppearance" />
+    </section>
+
+    <section class="settings-section">
+        <h3>@Loc["Section_DataStorage"]</h3>
+        <div class="data-path-info">
+            <label>@Loc["DataPath_Label"]</label>
+            <code class="data-path">@ConfigService.Current.DataPath</code>
+        </div>
+    </section>
+
+    <section class="settings-section settings-danger-zone">
+        <h3 class="text-red-400">@Loc["Section_DangerZone"]</h3>
+        <p class="settings-hint">@Loc["DangerZone_Hint"]</p>
+        <button class="btn btn-danger" @onclick="ShowResetDialog">
+            @Loc["DangerZone_ResetButton"]
+        </button>
+    </section>
+
+    <ConfirmDeleteDialog
+        IsVisible="_showResetDialog"
+        IsSystemProtected="true"
+        ConfirmWord="@Loc["DangerZone_ConfirmWord"]"
+        FileName="@Loc["DangerZone_FileName"]"
+        OnConfirm="ResetApplicationAsync"
+        OnCancel="HideResetDialog" />
+</div>

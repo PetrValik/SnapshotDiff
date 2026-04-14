@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<!-- Settings page -->
+	<data name="PageTitle" xml:space="preserve">
+		<value>Nastavení</value>
+	</data>
+	<data name="Section_WatchedDirs" xml:space="preserve">
+		<value>Adresáře ke skenování</value>
+	</data>
+	<data name="WatchedDirs_Hint" xml:space="preserve">
+		<value>Adresáře dostupné ke skenování. Spravujte štítky a odeberte adresáře, které již nepotřebujete.</value>
+	</data>
+	<data name="WatchedDirs_Empty" xml:space="preserve">
+		<value>Zatím nejsou přidány žádné adresáře. Přidejte adresář ze stránky Skenování.</value>
+	</data>
+	<data name="Section_Appearance" xml:space="preserve">
+		<value>Vzhled</value>
+	</data>
+	<data name="Section_DataStorage" xml:space="preserve">
+		<value>Úložiště dat</value>
+	</data>
+	<data name="DataPath_Label" xml:space="preserve">
+		<value>Složka dat:</value>
+	</data>
+
+	<!-- WatchedDirectoryRow -->
+	<data name="WatchedDir_Toggle_Enable" xml:space="preserve">
+		<value>Povolit</value>
+	</data>
+	<data name="WatchedDir_Toggle_Disable" xml:space="preserve">
+		<value>Zakázat</value>
+	</data>
+	<data name="WatchedDir_Btn_Remove" xml:space="preserve">
+		<value>Odebrat</value>
+	</data>
+	<data name="WatchedDir_Btn_Save" xml:space="preserve">
+		<value>Uložit</value>
+	</data>
+	<data name="WatchedDir_Btn_Cancel" xml:space="preserve">
+		<value>Zrušit</value>
+	</data>
+	<data name="WatchedDir_Confirm_Remove" xml:space="preserve">
+		<value>Odebrat tento adresář ze seznamu sledovaných?</value>
+	</data>
+	<data name="WatchedDir_Confirm_Hint" xml:space="preserve">
+		<value>Uložené snímky nebudou smazány.</value>
+	</data>
+	<data name="WatchedDir_Dialog_RemoveTitle" xml:space="preserve">
+		<value>Odebrat adresář</value>
+	</data>
+	<data name="WatchedDir_Tooltip_Rename" xml:space="preserve">
+		<value>Přejmenovat</value>
+	</data>
+	<data name="WatchedDir_Placeholder_Label" xml:space="preserve">
+		<value>Zobrazovaný název (volitelné)</value>
+	</data>
+	<data name="WatchedDir_LastScanned" xml:space="preserve">
+		<value>Naposledy skenováno: {0}</value>
+	</data>
+
+	<!-- AddDirectoryForm -->
+	<data name="AddDir_Placeholder" xml:space="preserve">
+		<value>C:\cesta\k\adresáři</value>
+	</data>
+	<data name="AddDir_Btn_Add" xml:space="preserve">
+		<value>Přidat adresář</value>
+	</data>
+	<data name="AddDir_Btn_Browse" xml:space="preserve">
+		<value>Procházet</value>
+	</data>
+	<data name="AddDir_Error_Empty" xml:space="preserve">
+		<value>Zadejte prosím cestu k adresáři.</value>
+	</data>
+	<data name="AddDir_Error_NotFound" xml:space="preserve">
+		<value>Adresář neexistuje.</value>
+	</data>
+
+	<!-- AppearanceForm -->
+	<data name="Appearance_Theme" xml:space="preserve">
+		<value>Barevné téma</value>
+	</data>
+	<data name="Appearance_Light" xml:space="preserve">
+		<value>Světlé</value>
+	</data>
+	<data name="Appearance_Dark" xml:space="preserve">
+		<value>Tmavé</value>
+	</data>
+	<data name="Appearance_System" xml:space="preserve">
+		<value>Systémové</value>
+	</data>
+	<data name="Appearance_Btn_Save" xml:space="preserve">
+		<value>Uložit</value>
+	</data>
+
+    <data name="Section_DefaultFilters" xml:space="preserve">
+        <value>Výchozí filtry skenování</value>
+    </data>
+    <data name="StaleAfterDays_Label" xml:space="preserve">
+        <value>Výchozí práh pro staré soubory (dny)</value>
+    </data>
+    <data name="NewWithinDays_Label" xml:space="preserve">
+        <value>Výchozí práh pro nové soubory (dny)</value>
+    </data>
+    <data name="SettingsSaved" xml:space="preserve">
+        <value>Nastavení uloženo</value>
+    </data>
+    <data name="Btn_SaveFilters" xml:space="preserve">
+        <value>Uložit</value>
+    </data>
+    <data name="DefaultFilters_Hint" xml:space="preserve">
+        <value>Výchozí prahy aplikované při spuštění nového skenování.</value>
+    </data>
+
+	<!-- Danger Zone -->
+	<data name="Section_DangerZone" xml:space="preserve">
+		<value>Nebezpečná zóna</value>
+	</data>
+	<data name="DangerZone_Hint" xml:space="preserve">
+		<value>Tyto akce jsou nevratné. Veškerá data aplikace včetně koše a konfigurace budou trvale odstraněna.</value>
+	</data>
+	<data name="DangerZone_ResetButton" xml:space="preserve">
+		<value>Resetovat aplikaci</value>
+	</data>
+	<data name="DangerZone_ConfirmWord" xml:space="preserve">
+		<value>RESET</value>
+	</data>
+	<data name="DangerZone_FileName" xml:space="preserve">
+		<value>všechna data aplikace</value>
+	</data>
+</root>

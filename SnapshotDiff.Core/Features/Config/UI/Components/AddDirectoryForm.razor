@@ -1,0 +1,26 @@
+@using SnapshotDiff.Features.Config.UI
+@using SnapshotDiff.Infrastructure.Storage
+
+<div class="add-directory-form">
+    <div class="add-dir-input-row">
+        <input class="app-input flex-1"
+               type="text"
+               placeholder="@Loc["AddDir_Placeholder"]"
+               @bind="_path"
+               @bind:event="oninput"
+               @onkeydown="OnKeyDown" />
+        @if (FolderPicker.IsSupported)
+        {
+            <AppButton Variant="secondary" OnClick="BrowseAsync">
+                📂 @Loc["AddDir_Btn_Browse"]
+            </AppButton>
+        }
+        <AppButton Variant="primary" OnClick="Submit" Disabled="@(!IsValid)">
+            @Loc["AddDir_Btn_Add"]
+        </AppButton>
+    </div>
+    @if (_error is not null)
+    {
+        <p class="input-error">@_error</p>
+    }
+</div>

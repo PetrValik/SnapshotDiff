@@ -1,0 +1,169 @@
+@page "/exclusions"
+@namespace SnapshotDiff.Features.ExclusionRules.UI.Pages
+
+<PageTitle>@Loc["PageTitle"] — SnapshotDiff</PageTitle>
+
+<div class="exclusion-page">
+
+    <!-- Header -->
+    <div>
+        <h1 class="page-title">@Loc["PageTitle"]</h1>
+        <p class="text-secondary text-sm mt-1">@Loc["PageSubtitle"]</p>
+    </div>
+
+    <!-- Help hint -->
+    <div class="exclusion-hint">
+        <span class="shrink-0 mt-0.5">💡</span>
+        <span>@Loc["Help_Patterns"]</span>
+    </div>
+
+    <!-- ── System Rules ───────────────────────────────────────────────────── -->
+    <section class="exclusion-section">
+        <div>
+            <h2>🔒 @Loc["Section_System"]</h2>
+            <p class="section-desc">@Loc["Section_System_Desc"]</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>@Loc["Label_Pattern"]</th>
+                        <th>@Loc["Label_Description"]</th>
+                        <th>@Loc["Label_DirectoryOnly"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rule in _systemRules)
+                    {
+                        <tr>
+                            <td><code class="code-inline">@rule.Pattern</code></td>
+                            <td class="text-sm text-muted">@GetLocalizedDescription(rule)</td>
+                            <td class="text-sm text-muted">@(rule.IsDirectoryOnly ? "✓" : "")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ── Global User Rules ─────────────────────────────────────────────── -->
+    <section class="exclusion-section">
+        <div>
+            <h2>🌍 @Loc["Section_Global"]</h2>
+            <p class="section-desc">@Loc["Section_Global_Desc"]</p>
+        </div>
+
+        <!-- Add rule form -->
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input class="app-input flex-1" placeholder="@Loc["Placeholder_Pattern"]"
+                   @bind="_newGlobalPattern" @bind:event="oninput"
+                   @onkeydown="@(async e => { if (e.Key == "Enter") await AddGlobalRule(); })" />
+            <input class="app-input flex-1" placeholder="@Loc["Placeholder_Description"]"
+                   @bind="_newGlobalDescription" @bind:event="oninput"
+                   @onkeydown="@(async e => { if (e.Key == "Enter") await AddGlobalRule(); })" />
+            <button class="btn btn-primary shrink-0" @onclick="AddGlobalRule"
+                    disabled="@(string.IsNullOrWhiteSpace(_newGlobalPattern))">
+                @Loc["Btn_AddRule"]
+            </button>
+        </div>
+
+        @if (_globalRules.Count == 0)
+        {
+            <p class="text-sm text-muted italic">@Loc["NoRules"]</p>
+        }
+        else
+        {
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>@Loc["Label_Enabled"]</th>
+                            <th>@Loc["Label_Pattern"]</th>
+                            <th>@Loc["Label_Description"]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rule in _globalRules)
+                        {
+                            <tr class="@(rule.IsEnabled ? "" : "opacity-50")">
+                                <td>
+                                    <input type="checkbox" checked="@rule.IsEnabled"
+                                           @onchange="e => ToggleGlobal(rule.Id, (bool)e.Value!)" />
+                                </td>
+                                <td><code class="code-inline">@rule.Pattern</code></td>
+                                <td class="text-sm text-muted">@rule.Description</td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm"
+                                            style="color: var(--color-deleted);"
+                                            @onclick="() => RemoveGlobalRule(rule.Id)">
+                                        @Loc["Btn_Remove"]
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <!-- ── Per-Directory Rules ────────────────────────────────────────────── -->
+    <section class="exclusion-section">
+        <div>
+            <h2>📁 @Loc["Section_PerDir"]</h2>
+            <p class="section-desc">@Loc["Section_PerDir_Desc"]</p>
+        </div>
+
+        @if (_watchedDirs.Count == 0)
+        {
+            <p class="text-sm text-muted italic">@Loc["NoWatchedDirs"]</p>
+        }
+        else
+        {
+            <select class="app-select w-full" value="@SelectedDirPath"
+                    @onchange="e => SelectedDirPath = e.Value?.ToString() ?? string.Empty">
+                <option value="">@Loc["SelectDirectory"]</option>
+                @foreach (var dir in _watchedDirs)
+                {
+                    <option value="@dir.Path">@dir.DisplayName (@dir.Path)</option>
+                }
+            </select>
+
+            @if (!string.IsNullOrEmpty(_selectedDirPath))
+            {
+                <!-- Add per-dir pattern -->
+                <div class="flex gap-2">
+                    <input class="app-input flex-1" placeholder="@Loc["Placeholder_PerDirPattern"]"
+                           @bind="_newDirPattern" @bind:event="oninput"
+                           @onkeydown="@(async e => { if (e.Key == "Enter") await AddDirPattern(); })" />
+                    <button class="btn btn-primary shrink-0" @onclick="AddDirPattern"
+                            disabled="@(string.IsNullOrWhiteSpace(_newDirPattern))">
+                        @Loc["Btn_AddPattern"]
+                    </button>
+                </div>
+
+                @if (_perDirPatterns.Count == 0)
+                {
+                    <p class="text-sm text-muted italic">@Loc["NoPatterns"]</p>
+                }
+                else
+                {
+                    <div class="space-y-1">
+                        @foreach (var pattern in _perDirPatterns)
+                        {
+                            <div class="pattern-list-item">
+                                <code class="code-inline">@pattern</code>
+                                <button class="btn btn-ghost btn-sm"
+                                        style="color: var(--color-deleted);"
+                                        @onclick="() => RemoveDirPattern(pattern)">
+                                    @Loc["Btn_Remove"]
+                                </button>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    </section>
+</div>

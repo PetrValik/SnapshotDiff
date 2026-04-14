@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<!-- Settings page -->
+	<data name="PageTitle" xml:space="preserve">
+		<value>Settings</value>
+	</data>
+	<data name="Section_WatchedDirs" xml:space="preserve">
+		<value>Scan Directories</value>
+	</data>
+	<data name="WatchedDirs_Hint" xml:space="preserve">
+		<value>Directories available for scanning. Manage labels and remove directories you no longer need.</value>
+	</data>
+	<data name="WatchedDirs_Empty" xml:space="preserve">
+		<value>No directories added yet. Add a directory from the Scan page to get started.</value>
+	</data>
+	<data name="Section_Appearance" xml:space="preserve">
+		<value>Appearance</value>
+	</data>
+	<data name="Section_DataStorage" xml:space="preserve">
+		<value>Data Storage</value>
+	</data>
+	<data name="DataPath_Label" xml:space="preserve">
+		<value>Data folder:</value>
+	</data>
+
+	<!-- WatchedDirectoryRow -->
+	<data name="WatchedDir_Toggle_Enable" xml:space="preserve">
+		<value>Enable</value>
+	</data>
+	<data name="WatchedDir_Toggle_Disable" xml:space="preserve">
+		<value>Disable</value>
+	</data>
+	<data name="WatchedDir_Btn_Remove" xml:space="preserve">
+		<value>Remove</value>
+	</data>
+	<data name="WatchedDir_Btn_Save" xml:space="preserve">
+		<value>Save</value>
+	</data>
+	<data name="WatchedDir_Btn_Cancel" xml:space="preserve">
+		<value>Cancel</value>
+	</data>
+	<data name="WatchedDir_Confirm_Remove" xml:space="preserve">
+		<value>Remove this directory from the watch list?</value>
+	</data>
+	<data name="WatchedDir_Confirm_Hint" xml:space="preserve">
+		<value>Saved snapshots will not be deleted.</value>
+	</data>
+	<data name="WatchedDir_Dialog_RemoveTitle" xml:space="preserve">
+		<value>Remove directory</value>
+	</data>
+	<data name="WatchedDir_Tooltip_Rename" xml:space="preserve">
+		<value>Rename</value>
+	</data>
+	<data name="WatchedDir_Placeholder_Label" xml:space="preserve">
+		<value>Display name (optional)</value>
+	</data>
+	<data name="WatchedDir_LastScanned" xml:space="preserve">
+		<value>Last scanned: {0}</value>
+	</data>
+
+	<!-- AddDirectoryForm -->
+	<data name="AddDir_Placeholder" xml:space="preserve">
+		<value>C:\path\to\directory</value>
+	</data>
+	<data name="AddDir_Btn_Add" xml:space="preserve">
+		<value>Add Directory</value>
+	</data>
+	<data name="AddDir_Btn_Browse" xml:space="preserve">
+		<value>Browse</value>
+	</data>
+	<data name="AddDir_Error_Empty" xml:space="preserve">
+		<value>Please enter a directory path.</value>
+	</data>
+	<data name="AddDir_Error_NotFound" xml:space="preserve">
+		<value>Directory does not exist.</value>
+	</data>
+
+	<!-- AppearanceForm -->
+	<data name="Appearance_Theme" xml:space="preserve">
+		<value>Color theme</value>
+	</data>
+	<data name="Appearance_Light" xml:space="preserve">
+		<value>Light</value>
+	</data>
+	<data name="Appearance_Dark" xml:space="preserve">
+		<value>Dark</value>
+	</data>
+	<data name="Appearance_System" xml:space="preserve">
+		<value>System</value>
+	</data>
+	<data name="Appearance_Btn_Save" xml:space="preserve">
+		<value>Save</value>
+	</data>
+
+    <data name="Section_DefaultFilters" xml:space="preserve">
+        <value>Default Scan Filters</value>
+    </data>
+    <data name="StaleAfterDays_Label" xml:space="preserve">
+        <value>Default stale threshold (days)</value>
+    </data>
+    <data name="NewWithinDays_Label" xml:space="preserve">
+        <value>Default new threshold (days)</value>
+    </data>
+    <data name="SettingsSaved" xml:space="preserve">
+        <value>Settings saved</value>
+    </data>
+    <data name="Btn_SaveFilters" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="DefaultFilters_Hint" xml:space="preserve">
+        <value>Default thresholds applied when starting a new scan.</value>
+    </data>
+
+	<!-- Danger Zone -->
+	<data name="Section_DangerZone" xml:space="preserve">
+		<value>Danger Zone</value>
+	</data>
+	<data name="DangerZone_Hint" xml:space="preserve">
+		<value>These actions are irreversible. All application data including trash and configuration will be permanently deleted.</value>
+	</data>
+	<data name="DangerZone_ResetButton" xml:space="preserve">
+		<value>Reset Application</value>
+	</data>
+	<data name="DangerZone_ConfirmWord" xml:space="preserve">
+		<value>RESET</value>
+	</data>
+	<data name="DangerZone_FileName" xml:space="preserve">
+		<value>all application data</value>
+	</data>
+</root>

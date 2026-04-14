@@ -1,0 +1,664 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Dark theme (default) */
+    --bg-main: #0d1117;
+    --bg-card: #161b22;
+    --bg-topbar: #010409;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-secondary: #b1bac4;
+    --text-muted: #6e7681;
+    --accent: #00d9ff;
+    --accent-hover: #1f6feb;
+    --accent-rgb: 0, 217, 255;
+
+    --color-added: #3fb950;
+    --color-added-bg: rgba(63, 185, 80, 0.15);
+    --color-added-border: rgba(63, 185, 80, 0.4);
+
+    --color-modified: #d29922;
+    --color-modified-bg: rgba(210, 153, 34, 0.15);
+    --color-modified-border: rgba(210, 153, 34, 0.4);
+
+    --color-deleted: #f85149;
+    --color-deleted-bg: rgba(248, 81, 73, 0.15);
+    --color-deleted-border: rgba(248, 81, 73, 0.4);
+}
+
+.light {
+    --bg-main: #f6f8fa;
+    --bg-card: #ffffff;
+    --bg-topbar: #f0f2f5;
+    --border: #d0d7de;
+    --text: #24292f;
+    --text-secondary: #424a53;
+    --text-muted: #6e7781;
+    --accent: #0969da;
+    --accent-hover: #0550ae;
+    --accent-rgb: 9, 105, 218;
+
+    --color-added: #1a7f37;
+    --color-added-bg: rgba(26, 127, 55, 0.1);
+    --color-added-border: rgba(26, 127, 55, 0.3);
+
+    --color-modified: #9a6700;
+    --color-modified-bg: rgba(154, 103, 0, 0.1);
+    --color-modified-border: rgba(154, 103, 0, 0.3);
+
+    --color-deleted: #cf222e;
+    --color-deleted-bg: rgba(207, 34, 46, 0.1);
+    --color-deleted-border: rgba(207, 34, 46, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-main);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    height: 100%;
+}
+
+a {
+    color: var(--accent);
+}
+
+/* Progress bar stripe animation */
+@keyframes progress-stripe {
+    from { background-position: 1rem 0; }
+    to { background-position: 0 0; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+@layer components {
+    /* Navigation */
+    .nav-link {
+        @apply flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors no-underline;
+        color: var(--text-secondary);
+    }
+    .nav-link:hover {
+        color: var(--text);
+        background: rgba(255,255,255,0.05);
+    }
+    .nav-link.active {
+        color: var(--accent);
+        background: rgba(var(--accent-rgb), 0.1);
+    }
+
+    /* Buttons */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer border-0 outline-none;
+        font-family: inherit;
+    }
+    .btn:disabled {
+        @apply opacity-50 cursor-not-allowed;
+    }
+    .btn-primary {
+        background: var(--accent);
+        color: var(--bg-main);
+    }
+    .btn-primary:hover:not(:disabled) {
+        background: var(--accent-hover);
+    }
+    .btn-secondary {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text);
+    }
+    .btn-secondary:hover:not(:disabled) {
+        background: rgba(255,255,255,0.05);
+    }
+    .btn-danger {
+        background: var(--color-deleted-bg);
+        border: 1px solid var(--color-deleted-border);
+        color: var(--color-deleted);
+    }
+    .btn-danger:hover:not(:disabled) {
+        background: rgba(248, 81, 73, 0.25);
+    }
+    .btn-ghost {
+        background: transparent;
+        color: var(--text-secondary);
+    }
+    .btn-ghost:hover:not(:disabled) {
+        background: rgba(255,255,255,0.05);
+        color: var(--text);
+    }
+    .btn-sm {
+        @apply px-2 py-1 text-xs;
+    }
+    .btn-icon {
+        @apply p-2 rounded-md;
+    }
+
+    /* Cards */
+    .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        @apply rounded-lg;
+    }
+    .card-header {
+        @apply px-4 py-3 border-b;
+        border-color: var(--border);
+    }
+    .card-body {
+        @apply p-4;
+    }
+
+    /* Form controls */
+    .form-input {
+        @apply w-full px-3 py-2 rounded-md text-sm outline-none transition-colors;
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: inherit;
+    }
+    .form-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
+    }
+    .form-input::placeholder {
+        color: var(--text-muted);
+    }
+    .form-label {
+        @apply block text-sm mb-1;
+        color: var(--text-secondary);
+    }
+    .form-group {
+        @apply mb-4;
+    }
+
+    /* Badge */
+    .badge {
+        @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+    }
+    .badge-added {
+        background: var(--color-added-bg);
+        color: var(--color-added);
+        border: 1px solid var(--color-added-border);
+    }
+    .badge-modified {
+        background: var(--color-modified-bg);
+        color: var(--color-modified);
+        border: 1px solid var(--color-modified-border);
+    }
+    .badge-deleted {
+        background: var(--color-deleted-bg);
+        color: var(--color-deleted);
+        border: 1px solid var(--color-deleted-border);
+    }
+    .badge-neutral {
+        background: rgba(255,255,255,0.05);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+    }
+
+    /* Table */
+    .data-table {
+        @apply w-full text-sm;
+        border-collapse: collapse;
+    }
+    .data-table th {
+        @apply px-3 py-2 text-left text-xs font-medium uppercase tracking-wider;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+        @apply px-3 py-2;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .data-table tr:hover td {
+        background: rgba(255,255,255,0.02);
+    }
+
+    /* Page layout */
+    .page {
+        @apply p-6 max-w-5xl mx-auto;
+    }
+    .page-title {
+        @apply text-xl font-semibold mb-6;
+        color: var(--text);
+    }
+    .section {
+        @apply mb-6;
+    }
+    .section-title {
+        @apply text-sm font-medium mb-3 uppercase tracking-wider;
+        color: var(--text-muted);
+    }
+
+    /* Toast */
+    .toast {
+        @apply flex items-start gap-3 px-4 py-3 rounded-lg shadow-lg text-sm;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text);
+        min-width: 300px;
+    }
+    .toast-success {
+        border-left: 3px solid var(--color-added);
+    }
+    .toast-error {
+        border-left: 3px solid var(--color-deleted);
+    }
+    .toast-info {
+        border-left: 3px solid var(--accent);
+    }
+
+    /* Spinner */
+    .spinner {
+        @apply inline-block rounded-full border-2 animate-spin;
+        border-color: var(--border);
+        border-top-color: var(--accent);
+    }
+
+    /* Separator */
+    .separator {
+        @apply my-4;
+        border-top: 1px solid var(--border);
+    }
+
+    /* Help page */
+    .toc-link {
+        @apply block px-2 py-1 rounded text-sm no-underline transition-colors;
+        color: var(--text-secondary);
+    }
+    .toc-link:hover {
+        color: var(--text);
+        background: rgba(255,255,255,0.05);
+    }
+    .prose-help p { @apply mb-2; }
+    .prose-help ul, .prose-help ol { @apply mb-2; }
+    .code {
+        @apply px-1 py-0.5 rounded text-xs font-mono;
+        background: rgba(255,255,255,0.08);
+        color: var(--accent);
+    }
+
+    /* ── App buttons (BEM) ── */
+    .app-btn {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer border-0 outline-none;
+        font-family: inherit;
+    }
+    .app-btn:disabled {
+        @apply opacity-50 cursor-not-allowed;
+    }
+    .app-btn--primary {
+        background: var(--accent);
+        color: var(--bg-main);
+    }
+    .app-btn--primary:hover:not(:disabled) {
+        background: var(--accent-hover);
+    }
+    .app-btn--secondary {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text);
+    }
+    .app-btn--secondary:hover:not(:disabled) {
+        background: rgba(255,255,255,0.05);
+    }
+    .app-btn--danger {
+        background: var(--color-deleted-bg);
+        border: 1px solid var(--color-deleted-border);
+        color: var(--color-deleted);
+    }
+    .app-btn--danger:hover:not(:disabled) {
+        background: rgba(248, 81, 73, 0.25);
+    }
+    .app-btn--ghost {
+        background: transparent;
+        color: var(--text-secondary);
+    }
+    .app-btn--ghost:hover:not(:disabled) {
+        background: rgba(255,255,255,0.05);
+        color: var(--text);
+    }
+    .app-btn--xs {
+        @apply px-2 py-1 text-xs;
+    }
+
+    /* ── App form controls ── */
+    .app-input {
+        @apply px-3 py-2 rounded-md text-sm outline-none transition-colors;
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: inherit;
+    }
+    .app-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
+    }
+    .app-input::placeholder {
+        color: var(--text-muted);
+    }
+    .app-select {
+        @apply px-3 py-2 rounded-md text-sm outline-none transition-colors;
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: inherit;
+        appearance: auto;
+    }
+    .app-select option {
+        background: var(--bg-card);
+        color: var(--text);
+    }
+    .app-select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
+    }
+
+    /* ── Filter panel (ScanPage sidebar) ── */
+    .filter-label {
+        @apply text-xs font-semibold uppercase tracking-wider;
+        color: var(--text-muted);
+    }
+    .filter-radio {
+        @apply flex items-center gap-2 text-sm cursor-pointer;
+        color: var(--text-secondary);
+    }
+    .filter-radio:hover {
+        color: var(--text);
+    }
+
+    /* ── Sticky table header ── */
+    .scan-page th[class*="sticky"] {
+        border-bottom: 1px solid var(--border);
+    }
+
+    /* ── File table rows ── */
+    .file-row {
+        transition: background 0.15s;
+    }
+    .file-row:hover {
+        background: rgba(255,255,255,0.02);
+    }
+    .file-row--selected {
+        background: rgba(var(--accent-rgb), 0.08);
+    }
+    .file-row--selected:hover {
+        background: rgba(var(--accent-rgb), 0.12);
+    }
+    .file-row .app-btn--ghost {
+        color: var(--text-secondary);
+    }
+    .file-row .app-btn--ghost:hover:not(:disabled) {
+        color: var(--text);
+    }
+
+    /* ── Dialog / modal ── */
+    .dialog-backdrop {
+        @apply fixed inset-0 flex items-center justify-center;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 50;
+    }
+    .dialog {
+        @apply rounded-lg p-6 w-full max-w-md shadow-xl;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+    }
+    .dialog-title {
+        @apply text-lg font-semibold mb-3;
+        color: var(--text);
+    }
+    .dialog-body {
+        @apply text-sm mb-4;
+        color: var(--text-secondary);
+    }
+    .dialog-warning {
+        @apply text-sm px-3 py-2 rounded-md mb-3;
+        background: var(--color-deleted-bg);
+        border: 1px solid var(--color-deleted-border);
+        color: var(--color-deleted);
+    }
+    .dialog-actions {
+        @apply flex justify-end gap-2 mt-4;
+    }
+
+    /* ── Toast container ── */
+    .toast-container {
+        @apply fixed bottom-4 right-4 flex flex-col gap-2;
+        z-index: 100;
+    }
+    .toast-close {
+        @apply ml-auto cursor-pointer text-lg leading-none;
+        background: transparent;
+        border: 0;
+        color: var(--text-muted);
+    }
+    .toast-close:hover {
+        color: var(--text);
+    }
+
+    /* ── Settings page ── */
+    .settings-page {
+        @apply p-6 max-w-3xl mx-auto;
+    }
+    .settings-title {
+        @apply text-xl font-semibold mb-6;
+        color: var(--text);
+    }
+    .settings-section {
+        @apply mb-8;
+    }
+    .settings-section h3 {
+        @apply text-sm font-semibold uppercase tracking-wider mb-3;
+        color: var(--text-muted);
+    }
+    .settings-hint {
+        @apply text-sm mb-3;
+        color: var(--text-secondary);
+    }
+    .settings-empty {
+        @apply text-sm italic;
+        color: var(--text-muted);
+    }
+    .settings-danger-zone {
+        @apply rounded-lg p-4;
+        border: 1px solid var(--color-deleted-border);
+        background: var(--color-deleted-bg);
+    }
+
+    /* ── Watched directory list ── */
+    .watched-dirs-list {
+        @apply flex flex-col gap-2 mb-4;
+    }
+    .watched-dir-row {
+        @apply flex items-center gap-3 px-3 py-2 rounded-md;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+    }
+    .watched-dir-row.disabled {
+        @apply opacity-50;
+    }
+    .watched-dir-info {
+        @apply flex items-center gap-3 flex-1 min-w-0;
+    }
+    .watched-dir-icon {
+        @apply text-lg shrink-0;
+    }
+    .watched-dir-details {
+        @apply flex flex-col min-w-0;
+    }
+    .watched-dir-name {
+        @apply text-sm font-medium truncate cursor-pointer;
+        color: var(--text);
+    }
+    .watched-dir-name:hover {
+        color: var(--accent);
+    }
+    .watched-dir-path {
+        @apply text-xs truncate;
+        color: var(--text-muted);
+    }
+    .watched-dir-actions {
+        @apply flex items-center gap-1 shrink-0;
+    }
+    .dir-label-input {
+        @apply text-sm px-2 py-1 rounded-md outline-none;
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        color: var(--text);
+    }
+    .dir-label-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
+    }
+
+    /* ── Add directory form ── */
+    .add-directory-form {
+        @apply mt-4;
+    }
+    .add-dir-input-row {
+        @apply flex gap-2;
+    }
+
+    /* ── Data path ── */
+    .data-path-info {
+        @apply flex flex-col gap-1;
+    }
+    .data-path-info label {
+        @apply text-sm;
+        color: var(--text-secondary);
+    }
+    .data-path {
+        @apply text-xs px-3 py-2 rounded-md font-mono;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+    }
+
+    /* ── Appearance form ── */
+    .appearance-form {
+        @apply space-y-4;
+    }
+
+    /* ── Error / hint text ── */
+    .input-error {
+        @apply text-xs mt-1;
+        color: var(--color-deleted);
+    }
+    .confirm-hint {
+        @apply text-xs mt-1;
+        color: var(--text-muted);
+    }
+
+    /* ── Utility classes ── */
+    .text-muted {
+        color: var(--text-muted);
+    }
+    .text-secondary {
+        color: var(--text-secondary);
+    }
+    .bg-surface {
+        background: var(--bg-card);
+    }
+    .bg-surface-2 {
+        background: rgba(255,255,255,0.06);
+    }
+    .light .bg-surface-2 {
+        background: rgba(0,0,0,0.04);
+    }
+    .code-inline {
+        @apply text-xs px-1.5 py-0.5 rounded font-mono;
+        background: rgba(255,255,255,0.06);
+        color: var(--accent);
+    }
+    .light .code-inline {
+        background: rgba(0,0,0,0.04);
+    }
+
+    /* ── Exclusion rules page ── */
+    .exclusion-page {
+        @apply p-6 max-w-4xl mx-auto space-y-6;
+    }
+    .exclusion-hint {
+        @apply p-3 rounded-lg text-sm flex gap-2;
+        background: rgba(var(--accent-rgb), 0.08);
+        border: 1px solid rgba(var(--accent-rgb), 0.25);
+        color: var(--text-secondary);
+    }
+    .exclusion-section {
+        @apply rounded-lg p-5 space-y-4;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+    }
+    .exclusion-section h2 {
+        @apply text-base font-semibold flex items-center gap-2;
+        color: var(--text);
+    }
+    .exclusion-section .section-desc {
+        @apply text-sm;
+        color: var(--text-secondary);
+    }
+    .pattern-list-item {
+        @apply flex items-center justify-between px-3 py-2 rounded-md;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+    }
+    .light .pattern-list-item {
+        background: rgba(0,0,0,0.02);
+    }
+}
+
+/* ── Number input: hide spinners ── */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Blazor error UI (outside @layer so Tailwind won't purge) */
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+.blazor-error-boundary {
+    background: #b32121;
+    padding: 1rem;
+    color: white;
+}
+.blazor-error-boundary::after {
+    content: "An error has occurred.";
+}

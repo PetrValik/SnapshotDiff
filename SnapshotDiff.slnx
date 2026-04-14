@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="SnapshotDiff.Core/SnapshotDiff.App.csproj" />
+  <Project Path="SnapshotDiff.MAUI/SnapshotDiff.MAUI.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="SnapshotDiff.Linux/SnapshotDiff.Linux.csproj" />
+  <Project Path="SnapshotDiff.Tests/SnapshotDiff.Tests.csproj" />
+</Solution>

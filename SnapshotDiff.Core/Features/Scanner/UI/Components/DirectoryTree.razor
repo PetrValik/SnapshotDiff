@@ -1,0 +1,53 @@
+@namespace SnapshotDiff.Features.Scanner.UI.Components
+@using SnapshotDiff.Features.Scanner.Domain
+
+@if (Nodes is not null)
+{
+    <ul style="padding-left: @(Depth > 0 ? "0.75rem" : "0")">
+        @foreach (var node in Nodes)
+        {
+            var isActive = string.Equals(SelectedPath, node.RelativePath, StringComparison.OrdinalIgnoreCase);
+            <li class="select-none">
+                <div class="flex items-center gap-1 px-1.5 py-0.5 rounded cursor-pointer text-xs transition-colors"
+                     style="@(isActive ? "background: var(--accent); color: #fff;" : "color: var(--text-primary);")"
+                     @onclick="() => OnSelectDirectory.InvokeAsync(node.RelativePath)">
+
+                    @if (node.Children.Count > 0)
+                    {
+                        <button class="w-3 h-3 flex items-center justify-center shrink-0 opacity-60"
+                                @onclick="() => ToggleExpand(node)" @onclick:stopPropagation>
+                            @(node.IsExpanded ? "▾" : "▸")
+                        </button>
+                    }
+                    else
+                    {
+                        <span class="w-3 shrink-0"></span>
+                    }
+
+                    <span class="truncate flex-1 min-w-0">@node.Name</span>
+                    <span class="shrink-0 tabular-nums opacity-50 text-[10px]">@node.TotalFileCount.ToString("N0")</span>
+                </div>
+
+                @if (node.IsExpanded && node.Children.Count > 0)
+                {
+                    <DirectoryTree Nodes="@node.Children"
+                                   Depth="@(Depth + 1)"
+                                   SelectedPath="@SelectedPath"
+                                   OnSelectDirectory="OnSelectDirectory" />
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public List<DirectoryNode>? Nodes { get; set; }
+    [Parameter] public int Depth { get; set; }
+    [Parameter] public string? SelectedPath { get; set; }
+    [Parameter] public EventCallback<string> OnSelectDirectory { get; set; }
+
+    private void ToggleExpand(DirectoryNode node)
+    {
+        node.IsExpanded = !node.IsExpanded;
+    }
+}

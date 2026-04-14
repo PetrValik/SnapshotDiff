@@ -1,0 +1,38 @@
+@page "/help"
+
+<PageTitle>Help – SnapshotDiff</PageTitle>
+
+<div class="page max-w-4xl">
+    <h2 class="page-title">Help & Documentation</h2>
+
+    <div class="flex gap-8">
+        <!-- TOC sidebar -->
+        <nav class="w-48 shrink-0 hidden md:block sticky top-6 self-start">
+            <p class="section-title">Contents</p>
+            <ul class="space-y-1 text-sm">
+                <li><a href="#overview" class="toc-link">Overview</a></li>
+                <li><a href="#watching" class="toc-link">Watched Directories</a></li>
+                <li><a href="#scanning" class="toc-link">Scanning</a></li>
+                <li><a href="#filters" class="toc-link">Filters</a></li>
+                <li><a href="#filelist" class="toc-link">File List</a></li>
+                <li><a href="#trash" class="toc-link">Trash</a></li>
+                <li><a href="#exclusions" class="toc-link">Exclusion Rules</a></li>
+                <li><a href="#export" class="toc-link">Export</a></li>
+                <li><a href="#tips" class="toc-link">Tips</a></li>
+            </ul>
+        </nav>
+
+        <!-- Content -->
+        <div class="flex-1 space-y-8 min-w-0">
+            @foreach (var section in _sections)
+            {
+                <div id="@(section.Id)" class="scroll-mt-4">
+                    <h3 class="text-base font-semibold mb-3" style="color: var(--text)">@(section.Title)</h3>
+                    <div class="text-sm leading-relaxed prose-help" style="color: var(--text-secondary)">
+                        @((MarkupString)section.Body)
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+@using SnapshotDiff.Shared.UI.Tables
+
+<div class="sortable-header" @onclick="OnClick">
+    @ChildContent
+    @if (SortDirection != SnapshotDiff.Shared.UI.Tables.SortDirection.None)
+    {
+        <span class="sort-indicator">@GetSortIcon()</span>
+    }
+</div>

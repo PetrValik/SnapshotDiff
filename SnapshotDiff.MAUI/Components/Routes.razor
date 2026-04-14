@@ -1,0 +1,66 @@
+﻿@using System.Globalization
+@inject SnapshotDiff.Infrastructure.Localization.CultureState CultureState
+@implements IDisposable
+
+@if (_isTransitioning)
+{
+    <div style="position:fixed;inset:0;z-index:99999;background:var(--bg-main,#111827);" />
+}
+
+<Router @key="_cultureVersion"
+        AppAssembly="typeof(MauiProgram).Assembly"
+        AdditionalAssemblies="new[] { typeof(SnapshotDiff.Features.Scanner.UI.Pages.ScanPage).Assembly }">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(SnapshotDiff.Components.Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="typeof(SnapshotDiff.Components.Layout.MainLayout)">
+            <p>Page not found.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private int _cultureVersion;
+    private bool _isTransitioning;
+
+    protected override void OnInitialized()
+    {
+        CultureState.OnChanged += HandleCultureChanged;
+    }
+
+    private void HandleCultureChanged()
+    {
+        _ = InvokeAsync(async () =>
+        {
+            try
+            {
+                _isTransitioning = true;
+                StateHasChanged();
+                await Task.Delay(50);
+
+                var ci = new CultureInfo(CultureState.Culture);
+                Thread.CurrentThread.CurrentCulture = ci;
+                Thread.CurrentThread.CurrentUICulture = ci;
+                CultureInfo.DefaultThreadCurrentCulture = ci;
+                CultureInfo.DefaultThreadCurrentUICulture = ci;
+                _cultureVersion = CultureState.Version;
+                StateHasChanged();
+                await Task.Delay(150);
+            }
+            catch (ObjectDisposedException) { }
+            finally
+            {
+                _isTransitioning = false;
+                try { StateHasChanged(); }
+                catch (ObjectDisposedException) { }
+            }
+        });
+    }
+
+    public void Dispose()
+    {
+        CultureState.OnChanged -= HandleCultureChanged;
+    }
+}

@@ -1,0 +1,25 @@
+@namespace SnapshotDiff.Shared.UI.Components
+
+<div class="flex flex-col items-center justify-center py-16 text-center @Class">
+    @if (Icon is not null)
+    {
+        <div class="mb-4 opacity-30" style="color: var(--text-muted)">@Icon</div>
+    }
+    <p class="text-sm font-medium mb-1" style="color: var(--text-secondary)">@Title</p>
+    @if (!string.IsNullOrEmpty(Description))
+    {
+        <p class="text-xs" style="color: var(--text-muted)">@Description</p>
+    }
+    @if (Action is not null)
+    {
+        <div class="mt-4">@Action</div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Nothing here yet";
+    [Parameter] public string Description { get; set; } = "";
+    [Parameter] public RenderFragment? Icon { get; set; }
+    [Parameter] public RenderFragment? Action { get; set; }
+    [Parameter] public string Class { get; set; } = "";
+}

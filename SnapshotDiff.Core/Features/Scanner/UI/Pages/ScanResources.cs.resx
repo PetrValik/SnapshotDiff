@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="PageTitle" xml:space="preserve"><value>Skenování</value></data>
+  <data name="Scan" xml:space="preserve"><value>Skenovat</value></data>
+  <data name="Scanning" xml:space="preserve"><value>Skenuji…</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Zrušit</value></data>
+  <data name="NoDirectories" xml:space="preserve"><value>Žádné adresáře — přidejte tlačítkem +</value></data>
+  <data name="EmptyState" xml:space="preserve"><value>Vyberte adresář a klikněte na Skenovat</value></data>
+  <data name="NoResults" xml:space="preserve"><value>Žádné soubory neodpovídají filtrům</value></data>
+  <data name="ClearFilters" xml:space="preserve"><value>Smazat filtry</value></data>
+
+  <data name="Filter_Age" xml:space="preserve"><value>Stáří</value></data>
+  <data name="Filter_All" xml:space="preserve"><value>Vše</value></data>
+  <data name="Filter_Stale" xml:space="preserve"><value>Staré (starší než)</value></data>
+  <data name="Filter_New" xml:space="preserve"><value>Nové (do)</value></data>
+  <data name="Filter_OlderThan" xml:space="preserve"><value>Starší než (dny)</value></data>
+  <data name="Filter_NewerThan" xml:space="preserve"><value>Novější než (dny)</value></data>
+  <data name="Filter_Days" xml:space="preserve"><value>dnů</value></data>
+  <data name="Filter_MinSize" xml:space="preserve"><value>Min. velikost (bajty)</value></data>
+  <data name="Filter_Bytes" xml:space="preserve"><value>bajty</value></data>
+  <data name="Filter_Extension" xml:space="preserve"><value>Přípona</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>Hledat název</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>název souboru…</value></data>
+
+  <data name="Col_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Col_Ext" xml:space="preserve"><value>Přípona</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Velikost</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Změněno</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Cesta</value></data>
+
+  <data name="Selection" xml:space="preserve"><value>{0} vybráno ({1})</value></data>
+  <data name="TotalFiles" xml:space="preserve"><value>{0} souborů</value></data>
+  <data name="ShowingOf" xml:space="preserve"><value>Zobrazeno {0} z {1} souborů</value></data>
+  <data name="Filter_Folders" xml:space="preserve"><value>Složky</value></data>
+  <data name="ProgressFiles" xml:space="preserve"><value>{0} souborů zpracováno</value></data>
+  <data name="Progress_Files" xml:space="preserve"><value>souborů</value></data>
+  <data name="Progress_Dirs" xml:space="preserve"><value>adresářů</value></data>
+  <data name="Progress_Counting" xml:space="preserve"><value>Počítám adresáře…</value></data>
+  <data name="Col_LastAccess" xml:space="preserve"><value>Posl. přístup</value></data>
+  <data name="LimitReached" xml:space="preserve"><value>Skenování zastaveno na {0} souborech kvůli paměti. Zužte adresář nebo použijte pravidla výjimek.</value></data>
+
+  <data name="Btn_MoveToTrash" xml:space="preserve"><value>Přesunout do koše</value></data>
+  <data name="Btn_DeletePermanently" xml:space="preserve"><value>Trvale smazat</value></data>
+
+  <data name="ScanComplete" xml:space="preserve"><value>Skenování dokončeno — nalezeno {0} položek</value></data>
+  <data name="ScanCancelled" xml:space="preserve"><value>Skenování zrušeno</value></data>
+  <data name="ScanFailed" xml:space="preserve"><value>Skenování selhalo: {0}</value></data>
+  <data name="MovedToTrash" xml:space="preserve"><value>Přesunuto do koše</value></data>
+  <data name="MovedToTrashCount" xml:space="preserve"><value>{0} položek přesunuto do koše</value></data>
+  <data name="TrashPartialError" xml:space="preserve"><value>{0} položek nelze přesunout do koše</value></data>
+  <data name="DeletedCount" xml:space="preserve"><value>{0} položek trvale smazáno</value></data>
+  <data name="DeletePartialError" xml:space="preserve"><value>{0} položek nelze smazat</value></data>
+
+  <data name="Dialog_DeleteTitle" xml:space="preserve"><value>Potvrdit smazání</value></data>
+  <data name="Dialog_DeletePrompt" xml:space="preserve"><value>Trvale smazat {0} vybraných položek?</value></data>
+  <data name="Dialog_SystemProtectedWarning" xml:space="preserve"><value>⚠ Některé soubory jsou systémově chráněné. Jejich smazání může destabilizovat OS.</value></data>
+  <data name="Dialog_TypePrompt" xml:space="preserve"><value>Napište {0} pro potvrzení:</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>Zrušit</value></data>
+  <data name="Dialog_DeleteConfirm" xml:space="preserve"><value>Smazat</value></data>
+  <data name="InaccessibleCount" xml:space="preserve"><value>{0} nedostupných cest</value></data>
+  <data name="Btn_Export" xml:space="preserve"><value>Exportovat</value></data>
+  <data name="Export_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="Export_Format_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="ExportSuccess" xml:space="preserve"><value>Exportováno {0} souborů → {1}</value></data>
+  <data name="ExportFailed" xml:space="preserve"><value>Export selhal: {0}</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Export výsledků skenování</value></data>
+  <data name="Export_Filename" xml:space="preserve"><value>Název souboru</value></data>
+  <data name="Export_FormatLabel" xml:space="preserve"><value>Formát</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>{0} souborů bude exportováno</value></data>
+  <data name="DirNotFound" xml:space="preserve"><value>Adresář „{0}" již neexistuje a byl odebrán ze seznamu sledovaných.</value></data>
+  <data name="Btn_AddDirectory" xml:space="preserve"><value>Přidat adresář</value></data>
+  <data name="DirAlreadyAdded" xml:space="preserve"><value>Adresář je již v seznamu</value></data>
+  <data name="DirAdded" xml:space="preserve"><value>Adresář přidán</value></data>
+</root>

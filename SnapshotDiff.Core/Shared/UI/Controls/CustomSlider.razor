@@ -1,0 +1,33 @@
+@using Microsoft.AspNetCore.Components
+
+<div class="custom-slider">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="slider-label">
+            @Label
+            <span class="slider-value">@Value</span>
+        </label>
+    }
+    
+    <div class="slider-container">
+        <input type="range"
+               class="slider-input"
+               min="@Min"
+               max="@Max"
+               step="@Step"
+               value="@Value"
+               @oninput="HandleInput"
+               style="--slider-percentage: @(GetPercentage())%" />
+        
+        <div class="slider-track">
+            <div class="slider-progress" style="width: @(GetPercentage())%"></div>
+        </div>
+        
+        <div class="slider-thumb" style="left: @(GetPercentage())%"></div>
+    </div>
+    
+    <div class="slider-range">
+        <span>@Min</span>
+        <span>@Max</span>
+    </div>
+</div>

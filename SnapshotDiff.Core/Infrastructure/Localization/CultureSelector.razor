@@ -1,0 +1,8 @@
+@using System.Globalization
+@inject ICultureService CultureService
+@inject CultureState CultureState
+@implements IDisposable
+
+<button class="culture-selector" @onclick="ToggleAsync" title="@GetFullName()">
+    @_displayCulture.ToUpper()
+</button>
