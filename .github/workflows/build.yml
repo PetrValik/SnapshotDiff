@@ -39,7 +39,7 @@ jobs:
         run: |
           dotnet restore SnapshotDiff.Core/SnapshotDiff.App.csproj
           dotnet restore SnapshotDiff/SnapshotDiff.csproj
-          dotnet restore SnapshotDiff.MAUI/SnapshotDiff.MAUI.csproj -p:TargetFrameworks=net10.0-windows10.0.19041.0
+          dotnet restore SnapshotDiff.MAUI/SnapshotDiff.MAUI.csproj -p:TargetFrameworks=net10.0-windows10.0.19041.0 -r win-x64
           dotnet restore SnapshotDiff.Tests/SnapshotDiff.Tests.csproj
 
       - name: Build Core
