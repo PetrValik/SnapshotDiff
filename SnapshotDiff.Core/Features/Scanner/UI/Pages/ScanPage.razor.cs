@@ -12,6 +12,7 @@ using SnapshotDiff.Features.Scanner.Domain;
 using SnapshotDiff.Features.Scanner.Infrastructure;
 using SnapshotDiff.Features.Trash.Infrastructure;
 using SnapshotDiff.Infrastructure.Notifications;
+using SnapshotDiff.Infrastructure.Permissions;
 using SnapshotDiff.Infrastructure.Storage;
 
 namespace SnapshotDiff.Features.Scanner.UI.Pages;
@@ -30,6 +31,7 @@ public partial class ScanPage : ComponentBase, IDisposable
     [Inject] private IStringLocalizer<ScanResources> Loc { get; set; } = default!;
     [Inject] private ILogger<ScanPage> Logger { get; set; } = default!;
     [Inject] private IFolderPickerService FolderPicker { get; set; } = default!;
+    [Inject] private IPlatformPermissionService PermissionService { get; set; } = default!;
 
     private List<WatchedDirectory> _watchedDirs = [];
     private string _selectedPath = string.Empty;
@@ -140,6 +142,12 @@ public partial class ScanPage : ComponentBase, IDisposable
             await ConfigService.RemoveWatchedDirectoryAsync(_selectedPath);
             _selectedPath = ConfigService.Current.WatchedDirectories.FirstOrDefault()?.Path ?? string.Empty;
             StateHasChanged();
+            return;
+        }
+
+        if (!await EnsureStoragePermissionAsync())
+        {
+            Notifications.ShowError(Loc["StoragePermissionDenied"]);
             return;
         }
 
@@ -544,5 +552,12 @@ public partial class ScanPage : ComponentBase, IDisposable
         ConfigService.ConfigChanged -= OnConfigChanged;
         _cts?.Cancel();
         _cts?.Dispose();
+    }
+
+    private async Task<bool> EnsureStoragePermissionAsync()
+    {
+        if (!PermissionService.RequiresExplicitPermission) return true;
+        if (await PermissionService.HasStorageReadAccessAsync()) return true;
+        return await PermissionService.RequestStorageReadAsync();
     }
 }

@@ -100,4 +100,5 @@
   <data name="Btn_AddDirectory" xml:space="preserve"><value>Add Directory</value></data>
   <data name="DirAlreadyAdded" xml:space="preserve"><value>Directory already in list</value></data>
   <data name="DirAdded" xml:space="preserve"><value>Directory added</value></data>
+  <data name="StoragePermissionDenied" xml:space="preserve"><value>Storage permission denied. Cannot scan without access to files.</value></data>
 </root>

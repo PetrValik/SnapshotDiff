@@ -8,6 +8,10 @@ using SnapshotDiff.Infrastructure;
 using SnapshotDiff.Infrastructure.Localization;
 using SnapshotDiff.Infrastructure.Storage;
 using SnapshotDiff.MAUI.Services;
+#if ANDROID
+using SnapshotDiff.Infrastructure.Permissions;
+using SnapshotDiff.MAUI.Platforms.Android.Services;
+#endif
 
 namespace SnapshotDiff.MAUI;
 
@@ -40,6 +44,13 @@ public static class MauiProgram
         builder.Services.AddLocalization();
         builder.Services.AddTrash();
         builder.Services.AddExclusionRules();
+
+#if ANDROID
+        // Override the desktop default with the Android runtime permission service
+        // (MANAGE_EXTERNAL_STORAGE on API 30+, READ_EXTERNAL_STORAGE on older).
+        // Last registration wins for scalar resolution.
+        builder.Services.AddSingleton<IPlatformPermissionService, AndroidPermissionService>();
+#endif
 
         // MAUI-specific: culture switcher
         builder.Services.AddScoped<ICultureService, MauiCultureService>();

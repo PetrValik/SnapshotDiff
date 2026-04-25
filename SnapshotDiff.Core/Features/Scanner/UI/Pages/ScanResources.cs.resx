@@ -100,4 +100,5 @@
   <data name="Btn_AddDirectory" xml:space="preserve"><value>Přidat adresář</value></data>
   <data name="DirAlreadyAdded" xml:space="preserve"><value>Adresář je již v seznamu</value></data>
   <data name="DirAdded" xml:space="preserve"><value>Adresář přidán</value></data>
+  <data name="StoragePermissionDenied" xml:space="preserve"><value>Přístup k úložišti zamítnut. Bez oprávnění nelze skenovat.</value></data>
 </root>
