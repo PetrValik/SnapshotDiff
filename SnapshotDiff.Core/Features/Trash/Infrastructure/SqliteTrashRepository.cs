@@ -5,7 +5,9 @@ using SnapshotDiff.Infrastructure.Storage;
 
 namespace SnapshotDiff.Features.Trash.Infrastructure;
 
-public sealed class SqliteTrashRepository(IStoragePathProvider storagePathProvider) : ITrashRepository, IDisposable
+public sealed class SqliteTrashRepository(
+    IStoragePathProvider storagePathProvider,
+    ILogger<SqliteTrashRepository> logger) : ITrashRepository, IDisposable
 {
     private readonly SqliteConnection _connection = OpenAndInit(storagePathProvider);
     private readonly SemaphoreSlim _lock = new(1, 1);
@@ -76,7 +78,7 @@ public sealed class SqliteTrashRepository(IStoragePathProvider storagePathProvid
             cmd.CommandText = "SELECT * FROM TrashItems WHERE Id = @id;";
             cmd.Parameters.AddWithValue("@id", id);
             await using var reader = await cmd.ExecuteReaderAsync(ct);
-            return await reader.ReadAsync(ct) ? ReadMeta(reader) : null;
+            return await reader.ReadAsync(ct) ? TryReadMeta(reader) : null;
         }
         finally { _lock.Release(); }
     }
@@ -91,7 +93,10 @@ public sealed class SqliteTrashRepository(IStoragePathProvider storagePathProvid
             await using var reader = await cmd.ExecuteReaderAsync(ct);
             var results = new List<TrashItemMeta>();
             while (await reader.ReadAsync(ct))
-                results.Add(ReadMeta(reader));
+            {
+                var meta = TryReadMeta(reader);
+                if (meta is not null) results.Add(meta);
+            }
             return results;
         }
         finally { _lock.Release(); }
@@ -108,7 +113,10 @@ public sealed class SqliteTrashRepository(IStoragePathProvider storagePathProvid
             await using var reader = await cmd.ExecuteReaderAsync(ct);
             var results = new List<TrashItemMeta>();
             while (await reader.ReadAsync(ct))
-                results.Add(ReadMeta(reader));
+            {
+                var meta = TryReadMeta(reader);
+                if (meta is not null) results.Add(meta);
+            }
             return results;
         }
         finally { _lock.Release(); }
@@ -126,16 +134,34 @@ public sealed class SqliteTrashRepository(IStoragePathProvider storagePathProvid
         finally { _lock.Release(); }
     }
 
-    private static TrashItemMeta ReadMeta(SqliteDataReader reader) => new()
+    private TrashItemMeta? TryReadMeta(SqliteDataReader reader)
     {
-        Id = reader.GetString(0),
-        OriginalPath = reader.GetString(1),
-        Name = reader.GetString(2),
-        DeletedAt = DateTime.Parse(reader.GetString(3), null, System.Globalization.DateTimeStyles.RoundtripKind),
-        ExpiresAt = DateTime.Parse(reader.GetString(4), null, System.Globalization.DateTimeStyles.RoundtripKind),
-        IsDirectory = reader.GetInt64(5) != 0,
-        SizeBytes = reader.GetInt64(6),
-    };
+        var id = reader.GetString(0);
+        var deletedRaw = reader.GetString(3);
+        var expiresRaw = reader.GetString(4);
+
+        if (!DateTime.TryParse(deletedRaw, null,
+                System.Globalization.DateTimeStyles.RoundtripKind, out var deletedAt) ||
+            !DateTime.TryParse(expiresRaw, null,
+                System.Globalization.DateTimeStyles.RoundtripKind, out var expiresAt))
+        {
+            logger.LogWarning(
+                "Skipping trash item {Id} with unparseable dates: DeletedAt='{DeletedRaw}', ExpiresAt='{ExpiresRaw}'",
+                id, deletedRaw, expiresRaw);
+            return null;
+        }
+
+        return new TrashItemMeta
+        {
+            Id = id,
+            OriginalPath = reader.GetString(1),
+            Name = reader.GetString(2),
+            DeletedAt = deletedAt,
+            ExpiresAt = expiresAt,
+            IsDirectory = reader.GetInt64(5) != 0,
+            SizeBytes = reader.GetInt64(6),
+        };
+    }
 
     public void Dispose()
     {
