@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using SnapshotDiff.Infrastructure.FileIO;
-using SnapshotDiff.Infrastructure.Hashing;
 using SnapshotDiff.Infrastructure.Localization;
 using SnapshotDiff.Infrastructure.Notifications;
 using SnapshotDiff.Infrastructure.Permissions;
@@ -21,9 +20,6 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        // Hashing
-        services.AddSingleton<IHasher, Sha256Hasher>();
-
         // Notifications - Singleton aby fungoval napříč scopes
         services.AddSingleton<INotificationService, NotificationService>();
 
