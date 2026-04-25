@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SnapshotDiff.Features.Config;
 using SnapshotDiff.Features.ExclusionRules.Infrastructure;
 using SnapshotDiff.Features.Export.Infrastructure;
