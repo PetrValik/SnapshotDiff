@@ -36,7 +36,7 @@ public sealed class TrashService(
         var target = Path.Combine(_filesDir, id);
 
         var isDirectory = Directory.Exists(fullPath);
-        long sizeBytes = isDirectory ? GetDirectorySize(fullPath) : new FileInfo(fullPath).Length;
+        long sizeBytes = isDirectory ? GetDirectorySize(fullPath, logger) : new FileInfo(fullPath).Length;
 
         // Insert metadata FIRST — if the app crashes after move but before insert,
         // the file would be orphaned with no way to restore it.
@@ -163,18 +163,26 @@ public sealed class TrashService(
     public async Task<TrashItemMeta?> GetItemAsync(string id, CancellationToken ct = default)
         => await repository.GetAsync(id, ct);
 
-    private static long GetDirectorySize(string path)
+    private static long GetDirectorySize(string path, ILogger logger)
     {
+        long total = 0;
         try
         {
-            return new DirectoryInfo(path)
-                .EnumerateFiles("*", SearchOption.AllDirectories)
-                .Sum(f => f.Length);
+            foreach (var file in new DirectoryInfo(path)
+                         .EnumerateFiles("*", SearchOption.AllDirectories))
+            {
+                try { total += file.Length; }
+                catch (Exception ex)
+                {
+                    logger.LogDebug(ex, "Skipping file in size calc: {File}", file.FullName);
+                }
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            return 0;
+            logger.LogWarning(ex, "Directory size calculation failed for: {Path}", path);
         }
+        return total;
     }
 
     // ── Cross-volume move helpers ────────────────────────────────────────────────
